@@ -1,0 +1,14 @@
+C:\!mario\proyectos\juego beta\bin\Debug\net8.0\juego beta.exe
+C:\!mario\proyectos\juego beta\bin\Debug\net8.0\juego beta.deps.json
+C:\!mario\proyectos\juego beta\bin\Debug\net8.0\juego beta.runtimeconfig.json
+C:\!mario\proyectos\juego beta\bin\Debug\net8.0\juego beta.dll
+C:\!mario\proyectos\juego beta\bin\Debug\net8.0\juego beta.pdb
+C:\!mario\proyectos\juego beta\obj\Debug\net8.0\juego beta.GeneratedMSBuildEditorConfig.editorconfig
+C:\!mario\proyectos\juego beta\obj\Debug\net8.0\juego beta.AssemblyInfoInputs.cache
+C:\!mario\proyectos\juego beta\obj\Debug\net8.0\juego beta.AssemblyInfo.cs
+C:\!mario\proyectos\juego beta\obj\Debug\net8.0\juego beta.csproj.CoreCompileInputs.cache
+C:\!mario\proyectos\juego beta\obj\Debug\net8.0\juego beta.dll
+C:\!mario\proyectos\juego beta\obj\Debug\net8.0\refint\juego beta.dll
+C:\!mario\proyectos\juego beta\obj\Debug\net8.0\juego beta.pdb
+C:\!mario\proyectos\juego beta\obj\Debug\net8.0\juego beta.genruntimeconfig.cache
+C:\!mario\proyectos\juego beta\obj\Debug\net8.0\ref\juego beta.dll
