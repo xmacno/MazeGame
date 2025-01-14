@@ -12,3 +12,4 @@ C:\!mario\proyectos\juego beta\obj\Debug\net8.0\refint\juego beta.dll
 C:\!mario\proyectos\juego beta\obj\Debug\net8.0\juego beta.pdb
 C:\!mario\proyectos\juego beta\obj\Debug\net8.0\juego beta.genruntimeconfig.cache
 C:\!mario\proyectos\juego beta\obj\Debug\net8.0\ref\juego beta.dll
+C:\!mario\proyectos\juego beta\obj\Debug\net8.0\juego beta.sourcelink.json

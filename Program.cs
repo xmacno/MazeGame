@@ -82,9 +82,9 @@ public class Laberinto
         Console.WriteLine("║   JUGADORES   ║     PUNTOS      ║    CANTIDAD     ║    HABILIDAD    ║   RESTAURACION     ║");
         Console.WriteLine("║               ║                 ║    DE PASOS     ║                 ║ DE LA HABILIDAD    ║");
         Console.WriteLine("╠═══════════════╬═════════════════╬═════════════════╬═════════════════╬════════════════════╣");
-        Console.WriteLine("║   JUGADOR 1   ║ " + puntos1 + "               ║ " + puntos1 + "               ║  " + habilidad1 + "              ║ " + enfriamiento1 + "                 ║");
+        Console.WriteLine("║   JUGADOR 1   ║ " + puntos1 + "               ║ " + puntos1 + "               ║  " + habilidad1 + "              ║ " + enfriamiento1 + "                  ║");
         Console.WriteLine("╠═══════════════╬═════════════════╬═════════════════╬═════════════════╬════════════════════╣");
-        Console.WriteLine("║   JUGADOR 2   ║ " + puntos2 + "               ║ " + puntos1 + "               ║  " + habilidad2 + "              ║ " + enfriamiento2 + "                 ║");
+        Console.WriteLine("║   JUGADOR 2   ║ " + puntos2 + "               ║ " + puntos1 + "               ║  " + habilidad2 + "              ║ " + enfriamiento2 + "                  ║");
         Console.WriteLine("╚═══════════════╩═════════════════╩═════════════════╩═════════════════╩════════════════════╝");
 
         for (int i = 0; i < n; i++)
