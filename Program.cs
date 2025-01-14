@@ -17,8 +17,8 @@ public class Laberinto
     static bool turnos = true;
     static int enfriamiento1 = 0;
     static int enfriamiento2 = 0;
-    static int c125 = 3;
-    static int c34 = 4;
+    static int cantpaso1 = 0;
+    static int cantpaso2 = 0;
 
 
     static void Main()
@@ -84,24 +84,24 @@ public class Laberinto
         Console.WriteLine("╠═══════════════╬═════════════════╬═════════════════╬═════════════════╬════════════════════╣");
         if (turnos)
         {
-            Console.BackgroundColor = ConsoleColor.Green;
-            Console.WriteLine("║   JUGADOR 1   ║ " + puntos1 + "               ║ " + puntos1 + "               ║  " + habilidad1 + "              ║ " + enfriamiento1 + "                  ║");
+            Console.BackgroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("║   JUGADOR 1   ║ " + puntos1 + "               ║ " + cantpaso1 + "               ║  " + habilidad1 + "              ║ " + enfriamiento1 + "                  ║");
             Console.ResetColor();
         }
         else
         {
-            Console.WriteLine("║   JUGADOR 1   ║ " + puntos1 + "               ║ " + puntos1 + "               ║  " + habilidad1 + "              ║ " + enfriamiento1 + "                  ║");
+            Console.WriteLine("║   JUGADOR 1   ║ " + puntos1 + "               ║ " + cantpaso1 + "               ║  " + habilidad1 + "              ║ " + enfriamiento1 + "                  ║");
         }
         Console.WriteLine("╠═══════════════╬═════════════════╬═════════════════╬═════════════════╬════════════════════╣");
         if (turnos == false)
         {
-            Console.BackgroundColor = ConsoleColor.Green;
-            Console.WriteLine("║   JUGADOR 2   ║ " + puntos2 + "               ║ " + puntos1 + "               ║  " + habilidad2 + "              ║ " + enfriamiento2 + "                  ║");
+            Console.BackgroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("║   JUGADOR 2   ║ " + puntos2 + "               ║ " + cantpaso2 + "               ║  " + habilidad2 + "              ║ " + enfriamiento2 + "                  ║");
             Console.ResetColor();
         }
         else
         {
-            Console.WriteLine("║   JUGADOR 2   ║ " + puntos2 + "               ║ " + puntos1 + "               ║  " + habilidad2 + "              ║ " + enfriamiento2 + "                  ║");
+            Console.WriteLine("║   JUGADOR 2   ║ " + puntos2 + "               ║ " + cantpaso2 + "               ║  " + habilidad2 + "              ║ " + enfriamiento2 + "                  ║");
         }
         Console.WriteLine("╚═══════════════╩═════════════════╩═════════════════╩═════════════════╩════════════════════╝");
 
@@ -117,6 +117,10 @@ public class Laberinto
                 if (matriz[i, j] == "*")
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
+                }
+                if (matriz[i, j] == "")
+                {
+
                 }
                 Console.Write(matriz[i, j]);
                 Console.ResetColor();
@@ -428,6 +432,18 @@ public class Laberinto
         int desc = 0;
         int hab = 0;
         int t = 0;
+        //para la tabla lps pasos
+        if (jug1 == "R") cantpaso1 = 3;
+        else if (jug1 == "M") cantpaso1 = 3;
+        else if (jug1 == "S") cantpaso1 = 4;
+        else if (jug1 == "J") cantpaso1 = 4;
+        else if (jug1 == "B") cantpaso1 = 3;
+
+        if (jug2 == "R") cantpaso2 = 3;
+        else if (jug2 == "M") cantpaso2 = 3;
+        else if (jug2 == "S") cantpaso2 = 4;
+        else if (jug2 == "J") cantpaso2 = 4;
+        else if (jug2 == "B") cantpaso2 = 3;
 
         while (true)
         {
@@ -452,6 +468,7 @@ public class Laberinto
                                 {
                                     playerX = playerX - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
 
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
@@ -503,6 +520,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerX = playerX + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -549,6 +567,7 @@ public class Laberinto
                                 if (matriz[playerX, playerY - 1] != "0")
                                 {
                                     playerY = playerY - 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                     c = c + 1;
                                 }
 
@@ -599,6 +618,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerY = playerY + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -645,6 +665,7 @@ public class Laberinto
                             case ConsoleKey.X:
                                 if (hab == 0 && habilidad1 > 0)
                                 {
+                                    cantpaso1 = cantpaso1 - 1;
                                     c = c - 3;
                                     habilidad1 = habilidad1 - 1;
                                     desc = 1;
@@ -653,8 +674,7 @@ public class Laberinto
                                 }
                                 break;
                         }
-
-
+                        hab = hab + 1;
                         matriz[playerX, playerY] = jug1;
 
                     }
@@ -681,6 +701,7 @@ public class Laberinto
                                 {
                                     playerX = playerX - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -728,6 +749,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerX = playerX + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -775,6 +797,7 @@ public class Laberinto
                                 {
                                     playerY = playerY - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -822,6 +845,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerY = playerY + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -874,6 +898,7 @@ public class Laberinto
                                 }
                                 break;
                         }
+                        hab = hab + 1;
                         matriz[playerX, playerY] = jug1;
 
                     }
@@ -901,6 +926,7 @@ public class Laberinto
                                 {
                                     playerX = playerX - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -947,6 +973,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerX = playerX + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -994,6 +1021,7 @@ public class Laberinto
                                 {
                                     playerY = playerY - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -1041,6 +1069,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerY = playerY + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -1095,6 +1124,7 @@ public class Laberinto
                                 }
                                 break;
                         }
+                        hab = hab + 1;
                         matriz[playerX, playerY] = jug1;
 
                     }
@@ -1122,6 +1152,7 @@ public class Laberinto
                                 {
                                     playerX = playerX - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X" && tramp)
@@ -1169,6 +1200,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerX = playerX + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X" && tramp)
@@ -1216,6 +1248,7 @@ public class Laberinto
                                 {
                                     playerY = playerY - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X" && tramp)
@@ -1263,6 +1296,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerY = playerY + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X" && tramp)
@@ -1342,6 +1376,7 @@ public class Laberinto
                                 {
                                     playerX = playerX - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -1387,6 +1422,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerX = playerX + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -1434,6 +1470,7 @@ public class Laberinto
                                 {
                                     playerY = playerY - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -1481,6 +1518,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerY = playerY + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -1542,6 +1580,7 @@ public class Laberinto
                                 }
                                 break;
                         }
+                        hab = hab + 1;
 
                         matriz[playerX, playerY] = jug1;
 
@@ -1573,6 +1612,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerXX = playerXX - 1;
+                                    cantpaso2 = cantpaso2 - 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
                                 if (matriz[playerXX, playerYY] == "X")
@@ -1620,6 +1660,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerXX = playerXX + 1;
+                                    cantpaso2 = cantpaso2 - 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
                                 if (matriz[playerXX, playerYY] == "X")
@@ -1667,6 +1708,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerYY = playerYY - 1;
+                                    cantpaso2 = cantpaso2 - 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
                                 if (matriz[playerXX, playerYY] == "X")
@@ -1714,6 +1756,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerYY = playerYY + 1;
+                                    cantpaso2 = cantpaso2 - 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
                                 if (matriz[playerXX, playerYY] == "X")
@@ -1759,6 +1802,7 @@ public class Laberinto
                             case ConsoleKey.X:
                                 if (hab == 0 && habilidad2 > 0)
                                 {
+                                    cantpaso2 = cantpaso2 + 3;
                                     c = c - 3;
                                     habilidad2 = habilidad2 - 1;
                                     desc = 1;
@@ -1768,6 +1812,7 @@ public class Laberinto
                                 break;
 
                         }
+                        hab = hab + 1;
                         matriz[playerXX, playerYY] = jug2;
 
                     }
@@ -1793,6 +1838,7 @@ public class Laberinto
                             case ConsoleKey.UpArrow:
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX - 1;
                                 }
@@ -1840,6 +1886,7 @@ public class Laberinto
                             case ConsoleKey.DownArrow:
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX + 1;
                                 }
@@ -1887,6 +1934,7 @@ public class Laberinto
                             case ConsoleKey.LeftArrow:
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY - 1;
                                 }
@@ -1934,6 +1982,7 @@ public class Laberinto
                             case ConsoleKey.RightArrow:
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY + 1;
                                 }
@@ -1990,7 +2039,7 @@ public class Laberinto
                                 break;
                         }
                         matriz[playerXX, playerYY] = jug2;
-
+                        hab = hab + 1;
                     }
                     if (habilidad2 == 0)
                     {
@@ -2014,6 +2063,7 @@ public class Laberinto
                             case ConsoleKey.UpArrow:
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX - 1;
                                 }
@@ -2061,6 +2111,7 @@ public class Laberinto
                             case ConsoleKey.DownArrow:
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX + 1;
                                 }
@@ -2108,6 +2159,7 @@ public class Laberinto
                             case ConsoleKey.LeftArrow:
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY - 1;
                                 }
@@ -2155,6 +2207,7 @@ public class Laberinto
                             case ConsoleKey.RightArrow:
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY + 1;
                                 }
@@ -2210,6 +2263,7 @@ public class Laberinto
                                 }
                                 break;
                         }
+                        hab = hab + 1;
                         matriz[playerXX, playerYY] = jug2;
 
                     }
@@ -2235,6 +2289,7 @@ public class Laberinto
                             case ConsoleKey.UpArrow:
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX - 1;
                                 }
@@ -2282,6 +2337,7 @@ public class Laberinto
                             case ConsoleKey.DownArrow:
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX + 1;
                                 }
@@ -2329,6 +2385,7 @@ public class Laberinto
                             case ConsoleKey.LeftArrow:
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY - 1;
                                 }
@@ -2376,6 +2433,7 @@ public class Laberinto
                             case ConsoleKey.RightArrow:
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY + 1;
                                 }
@@ -2455,6 +2513,7 @@ public class Laberinto
                             case ConsoleKey.UpArrow:
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX - 1;
                                 }
@@ -2502,6 +2561,7 @@ public class Laberinto
                             case ConsoleKey.DownArrow:
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX + 1;
                                 }
@@ -2549,6 +2609,7 @@ public class Laberinto
                             case ConsoleKey.LeftArrow:
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY - 1;
                                 }
@@ -2596,6 +2657,7 @@ public class Laberinto
                             case ConsoleKey.RightArrow:
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY + 1;
                                 }
@@ -2659,6 +2721,7 @@ public class Laberinto
                                 }
                                 break;
                         }
+                        hab = hab + 1;
 
                         matriz[playerXX, playerYY] = jug2;
 
@@ -2695,6 +2758,7 @@ public class Laberinto
                             case ConsoleKey.UpArrow:
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX - 1;
                                 }
@@ -2743,6 +2807,7 @@ public class Laberinto
                             case ConsoleKey.DownArrow:
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX + 1;
                                 }
@@ -2790,6 +2855,7 @@ public class Laberinto
                             case ConsoleKey.LeftArrow:
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY - 1;
                                 }
@@ -2837,6 +2903,7 @@ public class Laberinto
                             case ConsoleKey.RightArrow:
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY + 1;
                                 }
@@ -2901,6 +2968,7 @@ public class Laberinto
                             case ConsoleKey.UpArrow:
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX - 1;
                                 }
@@ -2948,6 +3016,7 @@ public class Laberinto
                             case ConsoleKey.DownArrow:
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX + 1;
                                 }
@@ -2995,6 +3064,7 @@ public class Laberinto
                             case ConsoleKey.LeftArrow:
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY - 1;
                                 }
@@ -3042,6 +3112,7 @@ public class Laberinto
                             case ConsoleKey.RightArrow:
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY + 1;
                                 }
@@ -3107,6 +3178,7 @@ public class Laberinto
                             case ConsoleKey.UpArrow:
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX - 1;
                                 }
@@ -3154,6 +3226,7 @@ public class Laberinto
                             case ConsoleKey.DownArrow:
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX + 1;
                                 }
@@ -3201,6 +3274,7 @@ public class Laberinto
                             case ConsoleKey.LeftArrow:
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY - 1;
                                 }
@@ -3248,6 +3322,7 @@ public class Laberinto
                             case ConsoleKey.RightArrow:
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY + 1;
                                 }
@@ -3314,6 +3389,7 @@ public class Laberinto
                             case ConsoleKey.UpArrow:
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX - 1;
                                 }
@@ -3361,6 +3437,7 @@ public class Laberinto
                             case ConsoleKey.DownArrow:
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX + 1;
                                 }
@@ -3408,6 +3485,7 @@ public class Laberinto
                             case ConsoleKey.LeftArrow:
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY - 1;
                                 }
@@ -3455,6 +3533,7 @@ public class Laberinto
                             case ConsoleKey.RightArrow:
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY + 1;
                                 }
@@ -3521,6 +3600,7 @@ public class Laberinto
                             case ConsoleKey.UpArrow:
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX - 1;
                                 }
@@ -3568,6 +3648,7 @@ public class Laberinto
                             case ConsoleKey.DownArrow:
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX + 1;
                                 }
@@ -3615,6 +3696,7 @@ public class Laberinto
                             case ConsoleKey.LeftArrow:
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY - 1;
                                 }
@@ -3662,6 +3744,7 @@ public class Laberinto
                             case ConsoleKey.RightArrow:
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
+                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY + 1;
                                 }
@@ -3736,6 +3819,7 @@ public class Laberinto
                                 if (matriz[playerX - 1, playerY] != "0")
                                 {
                                     playerX = playerX - 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                     c = c + 1;
                                 }
 
@@ -3785,6 +3869,7 @@ public class Laberinto
                                 if (matriz[playerX + 1, playerY] != "0")
                                 {
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                     playerX = playerX + 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
@@ -3831,6 +3916,7 @@ public class Laberinto
                                 {
                                     playerY = playerY - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
 
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
@@ -3878,6 +3964,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerY = playerY + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -3945,6 +4032,7 @@ public class Laberinto
                                 {
                                     playerX = playerX - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -3989,6 +4077,7 @@ public class Laberinto
                                 if (matriz[playerX + 1, playerY] != "0")
                                 {
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                     playerX = playerX + 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
@@ -4035,6 +4124,7 @@ public class Laberinto
                                 {
                                     playerY = playerY - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -4080,6 +4170,7 @@ public class Laberinto
                                 {
                                     c = c + 1;
                                     playerY = playerY + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -4144,6 +4235,7 @@ public class Laberinto
                                 {
                                     playerX = playerX - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -4188,6 +4280,7 @@ public class Laberinto
                                 if (matriz[playerX + 1, playerY] != "0")
                                 {
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                     playerX = playerX + 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
@@ -4234,6 +4327,7 @@ public class Laberinto
                                 {
                                     playerY = playerY - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -4278,6 +4372,7 @@ public class Laberinto
                                 if (matriz[playerX, playerY + 1] != "0")
                                 {
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                     playerY = playerY + 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
@@ -4344,6 +4439,7 @@ public class Laberinto
                                 {
                                     playerX = playerX - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -4388,6 +4484,7 @@ public class Laberinto
                                 if (matriz[playerX + 1, playerY] != "0")
                                 {
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                     playerX = playerX + 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
@@ -4434,6 +4531,7 @@ public class Laberinto
                                 {
                                     playerY = playerY - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -4478,6 +4576,7 @@ public class Laberinto
                                 if (matriz[playerX, playerY + 1] != "0")
                                 {
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                     playerY = playerY + 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
@@ -4543,6 +4642,7 @@ public class Laberinto
                                 {
                                     playerX = playerX - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -4587,6 +4687,7 @@ public class Laberinto
                                 if (matriz[playerX + 1, playerY] != "0")
                                 {
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                     playerX = playerX + 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
@@ -4633,6 +4734,7 @@ public class Laberinto
                                 {
                                     playerY = playerY - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -4677,6 +4779,7 @@ public class Laberinto
                                 if (matriz[playerX, playerY + 1] != "0")
                                 {
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                     playerY = playerY + 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
@@ -4729,6 +4832,17 @@ public class Laberinto
                 control2 = !control2;
                 hab = 1;
             }
+            if (jug1 == "R") cantpaso1 = 3;
+            else if (jug1 == "M") cantpaso1 = 3;
+            else if (jug1 == "S") cantpaso1 = 4;
+            else if (jug1 == "J") cantpaso1 = 4;
+            else if (jug1 == "B") cantpaso1 = 3;
+
+            if (jug2 == "R") cantpaso2 = 3;
+            else if (jug2 == "M") cantpaso2 = 3;
+            else if (jug2 == "S") cantpaso2 = 4;
+            else if (jug2 == "J") cantpaso2 = 4;
+            else if (jug2 == "B") cantpaso2 = 3;
         }
     }
     //para las diferentes trampas 
