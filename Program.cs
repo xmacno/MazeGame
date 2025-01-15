@@ -5,6 +5,7 @@ using System.Formats.Asn1;
 using System.Reflection.Metadata;
 using System.Security.AccessControl;
 using System.Security.Cryptography.X509Certificates;
+using System.Xml;
 public class Laberinto
 {
     static int n = 1000;
@@ -12,8 +13,8 @@ public class Laberinto
     static string[,] matriz = new string[n, m];
     static int puntos1 = 0;
     static int puntos2 = 0;
-    static int habilidad1 = 3;
-    static int habilidad2 = 3;
+    static int habilidad1 = 1;
+    static int habilidad2 = 1;
     static bool turnos = true;
     static int enfriamiento1 = 0;
     static int enfriamiento2 = 0;
@@ -38,12 +39,46 @@ public class Laberinto
     {
 
         int k = 0;
+        int kk = 0;
+        int op = 0;
         while (k == 0)
         {
-            Console.Clear();
-            Console.WriteLine("1-Jugar");
-            Console.WriteLine("2-Salir");
-            int op = int.Parse(Console.ReadLine()!);
+
+            while (kk == 0)
+            {
+                Console.Clear();
+                Console.WriteLine("> Jugar");
+                Console.WriteLine("  Salir");
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                if (keyInfo.Key == ConsoleKey.Enter) { op = 1; kk = 1; }
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.DownArrow:
+                        Console.Clear();
+                        Console.WriteLine("  Jugar");
+                        Console.WriteLine("> Salir");
+                        ConsoleKeyInfo teclasalir = Console.ReadKey(true);
+                        if (teclasalir.Key == ConsoleKey.Enter)
+                        {
+                            op = 2;
+                            kk = 1;
+                        }
+                        break;
+                    case ConsoleKey.UpArrow:
+                        Console.Clear();
+                        Console.WriteLine("> Jugar");
+                        Console.WriteLine("  Salir");
+                        ConsoleKeyInfo teclajugar = Console.ReadKey(true);
+                        if (teclajugar.Key == ConsoleKey.Enter)
+                        {
+                            op = 1;
+                            kk = 1;
+                        }
+                        break;
+
+                }
+            }
+
             if (op == 1)
             {
                 Console.Clear();
@@ -432,18 +467,16 @@ public class Laberinto
         int desc = 0;
         int hab = 0;
         int t = 0;
+        //para que cuando salte el turno no cambie el bool
+        int saltarturno = 0;
+        //para condicionar que el enfriamiento no incremente en el primer turno
+        int enf = 0;
+        int enf2 = 0;
         //para la tabla lps pasos
-        if (jug1 == "R") cantpaso1 = 3;
-        else if (jug1 == "M") cantpaso1 = 3;
-        else if (jug1 == "S") cantpaso1 = 4;
-        else if (jug1 == "J") cantpaso1 = 4;
-        else if (jug1 == "B") cantpaso1 = 3;
-
-        if (jug2 == "R") cantpaso2 = 3;
-        else if (jug2 == "M") cantpaso2 = 3;
-        else if (jug2 == "S") cantpaso2 = 4;
-        else if (jug2 == "J") cantpaso2 = 4;
-        else if (jug2 == "B") cantpaso2 = 3;
+        if (jug1 == "R" || jug1 == "M" || jug1 == "B") cantpaso1 = 3;
+        else if (jug1 == "S" || jug1 == "J") cantpaso1 = 4;
+        if (jug2 == "R" || jug2 == "M" || jug2 == "B") cantpaso2 = 3;
+        else if (jug2 == "S" || jug2 == "J") cantpaso2 = 4;
 
         while (true)
         {
@@ -451,7 +484,7 @@ public class Laberinto
             t = 0;
             if (turnos)
             {
-                if (jug1 == "R")
+                if (jug1 == "R" || jug1 == "M" || jug1 == "B")
                 {
                     for (int c = 0; c < 3;)
                     {
@@ -663,906 +696,23 @@ public class Laberinto
 
                                 break;
                             case ConsoleKey.X:
-                                if (hab == 0 && habilidad1 > 0)
+                                if (hab == 0 && habilidad1 > 0 && jug1 == "R")
                                 {
-                                    cantpaso1 = cantpaso1 - 1;
+                                    cantpaso1 = cantpaso1 + 3;
                                     c = c - 3;
                                     habilidad1 = habilidad1 - 1;
                                     desc = 1;
                                     hab = hab + 1;
 
                                 }
-                                break;
-                        }
-                        hab = hab + 1;
-                        matriz[playerX, playerY] = jug1;
-
-                    }
-                    if (habilidad1 == 0)
-                    {
-                        enfriamiento1 = enfriamiento1 + 1;
-                        if (enfriamiento1 == 3) habilidad1 = 3;
-                    }
-                }
-                else if (jug1 == "M")
-                {
-                    for (int c = 0; c < 3;)
-                    {
-                        t = 0;
-                        DescDeHab(desc, t);
-                        Win();
-                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                        tip = random.Next(0, 3);
-                        matriz[playerX, playerY] = " ";
-                        switch (keyInfo.Key)
-                        {
-                            case ConsoleKey.UpArrow:
-                                if (matriz[playerX - 1, playerY] != "0")
+                                if (hab == 0 && habilidad1 > 0 && jug1 == "M")
                                 {
-                                    playerX = playerX - 1;
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.DownArrow:
-                                if (matriz[playerX + 1, playerY] != "0")
-                                {
-                                    c = c + 1;
-                                    playerX = playerX + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.LeftArrow:
-                                if (matriz[playerX, playerY - 1] != "0")
-                                {
-                                    playerY = playerY - 1;
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.RightArrow:
-                                if (matriz[playerX, playerY + 1] != "0")
-                                {
-                                    c = c + 1;
-                                    playerY = playerY + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.X:
-                                if (hab == 0 && habilidad1 > 0)
-                                {
-                                    turnos = !turnos;
+                                    saltarturno = 1;
                                     habilidad1 = habilidad1 - 1;
                                     desc = 2;
                                     hab = hab + 1;
                                 }
-                                break;
-                        }
-                        hab = hab + 1;
-                        matriz[playerX, playerY] = jug1;
-
-                    }
-                    if (habilidad1 == 0)
-                    {
-                        enfriamiento1 = enfriamiento1 + 1;
-                        if (enfriamiento1 == 3) habilidad1 = 3;
-
-                    }
-                }
-                else if (jug1 == "S")
-                {
-                    for (int c = 0; c < 4;)
-                    {
-                        t = 0;
-                        DescDeHab(desc, t);
-                        Win();
-                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                        tip = random.Next(0, 3);
-                        matriz[playerX, playerY] = " ";
-                        switch (keyInfo.Key)
-                        {
-                            case ConsoleKey.UpArrow:
-                                if (matriz[playerX - 1, playerY] != "0")
-                                {
-                                    playerX = playerX - 1;
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.DownArrow:
-                                if (matriz[playerX + 1, playerY] != "0")
-                                {
-                                    c = c + 1;
-                                    playerX = playerX + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.LeftArrow:
-                                if (matriz[playerX, playerY - 1] != "0")
-                                {
-                                    playerY = playerY - 1;
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.RightArrow:
-                                if (matriz[playerX, playerY + 1] != "0")
-                                {
-                                    c = c + 1;
-                                    playerY = playerY + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-
-                                break;
-                            case ConsoleKey.X:
-                                if (hab == 0 && habilidad1 > 0)
-                                {
-                                    control1 = !control1;
-                                    c = 5;
-                                    habilidad1 = habilidad1 - 1;
-                                    desc = 3;
-                                    hab = hab + 1;
-                                }
-                                break;
-                        }
-                        hab = hab + 1;
-                        matriz[playerX, playerY] = jug1;
-
-                    }
-                    if (habilidad1 == 0)
-                    {
-                        enfriamiento1 = enfriamiento1 + 1;
-                        if (enfriamiento1 == 3) habilidad1 = 3;
-
-                    }
-                }
-                else if (jug1 == "J")
-                {
-                    for (int c = 0; c < 4;)
-                    {
-                        t = 0;
-                        DescDeHab(desc, t);
-                        Win();
-                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                        tip = random.Next(0, 3);
-                        matriz[playerX, playerY] = " ";
-                        switch (keyInfo.Key)
-                        {
-                            case ConsoleKey.UpArrow:
-                                if (matriz[playerX - 1, playerY] != "0")
-                                {
-                                    playerX = playerX - 1;
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X" && tramp)
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.DownArrow:
-                                if (matriz[playerX + 1, playerY] != "0")
-                                {
-                                    c = c + 1;
-                                    playerX = playerX + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X" && tramp)
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.LeftArrow:
-                                if (matriz[playerX, playerY - 1] != "0")
-                                {
-                                    playerY = playerY - 1;
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X" && tramp)
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.RightArrow:
-                                if (matriz[playerX, playerY + 1] != "0")
-                                {
-                                    c = c + 1;
-                                    playerY = playerY + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X" && tramp)
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.X:
-                                if (hab == 0 && habilidad1 > 0)
-                                {
-                                    tramp = false;
-                                    hab = hab + 1;
-                                    desc = 4;
-                                }
-                                break;
-                        }
-                        hab = hab + 1;
-                        matriz[playerX, playerY] = jug1;
-
-                    }
-                    if (habilidad1 == 0)
-                    {
-                        enfriamiento1 = enfriamiento1 + 1;
-                        if (enfriamiento1 == 3) habilidad1 = 3;
-
-                    }
-                }
-                else if (jug1 == "B")
-                {
-                    for (int c = 0; c < 3;)
-                    {
-                        t = 0;
-                        DescDeHab(desc, t);
-                        Win();
-                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                        tip = random.Next(0, 3);
-                        matriz[playerX, playerY] = " ";
-                        switch (keyInfo.Key)
-                        {
-                            case ConsoleKey.UpArrow:
-                                if (matriz[playerX - 1, playerY] != "0")
-                                {
-                                    playerX = playerX - 1;
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.DownArrow:
-                                if (matriz[playerX + 1, playerY] != "0")
-                                {
-                                    c = c + 1;
-                                    playerX = playerX + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.LeftArrow:
-                                if (matriz[playerX, playerY - 1] != "0")
-                                {
-                                    playerY = playerY - 1;
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.RightArrow:
-                                if (matriz[playerX, playerY + 1] != "0")
-                                {
-                                    c = c + 1;
-                                    playerY = playerY + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.X:
-                                if (hab == 0 && habilidad1 > 0)
+                                if (hab == 0 && habilidad1 > 0 && jug1 == "B")
                                 {
                                     if (puntos2 != 0)
                                     {
@@ -1581,21 +731,256 @@ public class Laberinto
                                 break;
                         }
                         hab = hab + 1;
-
                         matriz[playerX, playerY] = jug1;
 
                     }
                     if (habilidad1 == 0)
                     {
-                        enfriamiento1 = enfriamiento1 + 1;
-                        if (enfriamiento1 == 3) habilidad1 = 3;
+                        if (enf == 1 && jug1 != "M") enfriamiento1 = enfriamiento1 + 1;
+                        if (jug1 != "M") enf = 1;
+                        if (enf == 2) enfriamiento1 = enfriamiento1 + 1;
+                        if (jug1 == "M" && enf < 2) enf = enf + 1;
+                        if (enfriamiento1 == 3) { habilidad1 = 1; enf = 0; }
+
+                    }
+                }
+                else if (jug1 == "S" || jug1 == "J")
+                {
+                    for (int c = 0; c < 4;)
+                    {
+                        t = 0;
+                        DescDeHab(desc, t);
+                        Win();
+                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                        tip = random.Next(0, 3);
+                        matriz[playerX, playerY] = " ";
+                        switch (keyInfo.Key)
+                        {
+                            case ConsoleKey.UpArrow:
+                                if (matriz[playerX - 1, playerY] != "0")
+                                {
+                                    playerX = playerX - 1;
+                                    c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
+                                }
+                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "X")
+                                {
+                                    switch (tip)
+                                    {
+                                        case 0:
+                                            {
+                                                matriz[playerX, playerY] = " ";
+                                                playerX = 2;
+                                                playerY = 2;
+                                                t = 1;
+                                                matriz[playerX, playerY] = jug1;
+                                                DescDeHab(desc, t);
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case 1:
+                                            {
+                                                if (puntos1 != 0)
+                                                {
+                                                    puntos1 = puntos1 - 1;
+                                                    t = 2;
+                                                }
+                                                else t = 3;
+                                                DescDeHab(desc, t);
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case 2:
+                                            {
+                                                c = 10;
+                                                t = 4;
+                                                matriz[playerX, playerY] = jug1;
+                                                DescDeHab(desc, t);
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                    }
+                                }
+                                break;
+                            case ConsoleKey.DownArrow:
+                                if (matriz[playerX + 1, playerY] != "0")
+                                {
+                                    c = c + 1;
+                                    playerX = playerX + 1;
+                                    cantpaso1 = cantpaso1 - 1;
+                                }
+                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "X")
+                                {
+                                    switch (tip)
+                                    {
+                                        case 0:
+                                            {
+                                                matriz[playerX, playerY] = " ";
+                                                playerX = 2;
+                                                playerY = 2;
+                                                t = 1;
+                                                matriz[playerX, playerY] = jug1;
+                                                DescDeHab(desc, t);
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case 1:
+                                            {
+                                                if (puntos1 != 0)
+                                                {
+                                                    puntos1 = puntos1 - 1;
+                                                    t = 2;
+                                                }
+                                                else t = 3;
+                                                matriz[playerX, playerY] = jug1;
+                                                DescDeHab(desc, t);
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case 2:
+                                            {
+                                                c = 10;
+                                                t = 4;
+                                                matriz[playerX, playerY] = jug1;
+                                                DescDeHab(desc, t);
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                    }
+                                }
+                                break;
+                            case ConsoleKey.LeftArrow:
+                                if (matriz[playerX, playerY - 1] != "0")
+                                {
+                                    playerY = playerY - 1;
+                                    c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
+                                }
+                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "X")
+                                {
+                                    switch (tip)
+                                    {
+                                        case 0:
+                                            {
+                                                matriz[playerX, playerY] = " ";
+                                                playerX = 2;
+                                                playerY = 2;
+                                                t = 1;
+                                                matriz[playerX, playerY] = jug1;
+                                                DescDeHab(desc, t);
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case 1:
+                                            {
+                                                if (puntos1 != 0)
+                                                {
+                                                    puntos1 = puntos1 - 1;
+                                                    t = 2;
+                                                }
+                                                else t = 3;
+                                                matriz[playerX, playerY] = jug1;
+                                                DescDeHab(desc, t);
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case 2:
+                                            {
+                                                c = 10;
+                                                t = 4;
+                                                matriz[playerX, playerY] = jug1;
+                                                DescDeHab(desc, t);
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                    }
+                                }
+                                break;
+                            case ConsoleKey.RightArrow:
+                                if (matriz[playerX, playerY + 1] != "0")
+                                {
+                                    c = c + 1;
+                                    playerY = playerY + 1;
+                                    cantpaso1 = cantpaso1 - 1;
+                                }
+                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "X")
+                                {
+                                    switch (tip)
+                                    {
+                                        case 0:
+                                            {
+                                                matriz[playerX, playerY] = " ";
+                                                playerX = 2;
+                                                playerY = 2;
+                                                t = 1;
+                                                matriz[playerX, playerY] = jug1;
+                                                DescDeHab(desc, t);
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case 1:
+                                            {
+                                                if (puntos1 != 0)
+                                                {
+                                                    puntos1 = puntos1 - 1;
+                                                    t = 2;
+                                                }
+                                                else t = 3;
+                                                matriz[playerX, playerY] = jug1;
+                                                DescDeHab(desc, t);
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case 2:
+                                            {
+                                                c = 10;
+                                                t = 4;
+                                                matriz[playerX, playerY] = jug1;
+                                                DescDeHab(desc, t);
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                    }
+                                }
+
+                                break;
+                            case ConsoleKey.X:
+                                if (hab == 0 && habilidad1 > 0 && jug1 == "S")
+                                {
+                                    control1 = !control1;
+                                    c = 5;
+                                    habilidad1 = habilidad1 - 1;
+                                    desc = 3;
+                                    hab = hab + 1;
+                                }
+                                if (hab == 0 && habilidad1 > 0 && jug1 == "J")
+                                {
+                                    tramp = false;
+                                    hab = hab + 1;
+                                    desc = 4;
+                                }
+                                break;
+                        }
+                        hab = hab + 1;
+                        matriz[playerX, playerY] = jug1;
+
+                    }
+                    if (habilidad1 == 0)
+                    {
+                        if (enf == 1) enfriamiento1 = enfriamiento1 + 1;
+                        enf = 1;
+                        if (enfriamiento1 == 3) { habilidad1 = 1; enf = 0; }
 
                     }
                 }
             }
             else
             {
-                if (jug2 == "R")
+                if (jug2 == "R" || jug2 == "M" || jug2 == "B")
                 {
                     for (int c = 0; c < 3;)
                     {
@@ -1800,7 +1185,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.X:
-                                if (hab == 0 && habilidad2 > 0)
+                                if (hab == 0 && habilidad2 > 0 && jug2 == "R")
                                 {
                                     cantpaso2 = cantpaso2 + 3;
                                     c = c - 3;
@@ -1808,247 +1193,46 @@ public class Laberinto
                                     desc = 1;
                                     hab = hab + 1;
                                 }
-
-                                break;
-
-                        }
-                        hab = hab + 1;
-                        matriz[playerXX, playerYY] = jug2;
-
-                    }
-                    if (habilidad2 == 0)
-                    {
-                        enfriamiento2 = enfriamiento2 + 1;
-                        if (enfriamiento2 == 3) habilidad2 = 3;
-
-                    }
-                }
-                else if (jug2 == "M")
-                {
-                    for (int c = 0; c < 3;)
-                    {
-                        t = 0;
-                        DescDeHab(desc, t);
-                        Win();
-                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                        tip = random.Next(0, 3);
-                        matriz[playerXX, playerYY] = " ";
-                        switch (keyInfo.Key)
-                        {
-                            case ConsoleKey.UpArrow:
-                                if (matriz[playerXX - 1, playerYY] != "0")
+                                if (hab == 0 && habilidad2 > 0 && jug2 == "M")
                                 {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerXX = playerXX - 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.DownArrow:
-                                if (matriz[playerXX + 1, playerYY] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerXX = playerXX + 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.LeftArrow:
-                                if (matriz[playerXX, playerYY - 1] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerYY = playerYY - 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.RightArrow:
-                                if (matriz[playerXX, playerYY + 1] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerYY = playerYY + 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.X:
-                                if (hab == 0 && habilidad2 > 0)
-                                {
-                                    turnos = !turnos;
+                                    saltarturno = 1;
                                     habilidad2 = habilidad2 - 1;
                                     desc = 2;
                                     hab = hab + 1;
                                 }
-
+                                if (hab == 0 && habilidad2 > 0 && jug2 == "B")
+                                {
+                                    if (puntos1 != 0)
+                                    {
+                                        puntos2 = puntos2 + 1;
+                                        puntos1 = puntos1 - 1;
+                                        desc = 5;
+                                        habilidad2 = habilidad2 - 1;
+                                    }
+                                    else
+                                    {
+                                        desc = 6;
+                                    }
+                                    hab = hab + 1;
+                                }
                                 break;
+
                         }
-                        matriz[playerXX, playerYY] = jug2;
                         hab = hab + 1;
+                        matriz[playerXX, playerYY] = jug2;
+
                     }
                     if (habilidad2 == 0)
                     {
-                        enfriamiento2 = enfriamiento2 + 1;
-                        if (enfriamiento2 == 3) habilidad2 = 3;
+                        if (enf2 == 1 && jug2 != "M") enfriamiento2 = enfriamiento2 + 1;
+                        if (jug2 != "M") enf2 = 1;
+                        if (enf2 == 2) enfriamiento2 = enfriamiento2 + 1;
+                        if (jug2 == "M" && enf2 < 2) enf2 = enf2 + 1;
+                        if (enfriamiento2 == 3) { habilidad2 = 1; enf2 = 0; }
 
                     }
                 }
-                else if (jug2 == "S")
+                else if (jug2 == "S" || jug2 == "J")
                 {
                     for (int c = 0; c < 4;)
                     {
@@ -2068,7 +1252,7 @@ public class Laberinto
                                     playerXX = playerXX - 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
+                                if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
                                     switch (tip)
                                     {
@@ -2116,7 +1300,7 @@ public class Laberinto
                                     playerXX = playerXX + 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
+                                if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
                                     switch (tip)
                                     {
@@ -2164,7 +1348,7 @@ public class Laberinto
                                     playerYY = playerYY - 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
+                                if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
                                     switch (tip)
                                     {
@@ -2212,7 +1396,7 @@ public class Laberinto
                                     playerYY = playerYY + 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
+                                if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
                                     switch (tip)
                                     {
@@ -2253,7 +1437,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.X:
-                                if (hab == 0 && habilidad2 > 0)
+                                if (hab == 0 && habilidad2 > 0 && jug2 == "S")
                                 {
                                     control2 = !control2;
                                     c = 5;
@@ -2261,225 +1445,7 @@ public class Laberinto
                                     desc = 3;
                                     hab = hab + 1;
                                 }
-                                break;
-                        }
-                        hab = hab + 1;
-                        matriz[playerXX, playerYY] = jug2;
-
-                    }
-                    if (habilidad2 == 0)
-                    {
-                        enfriamiento2 = enfriamiento2 + 1;
-                        if (enfriamiento2 == 3) habilidad2 = 3;
-
-                    }
-                }
-                else if (jug2 == "J")
-                {
-                    for (int c = 0; c < 4;)
-                    {
-                        t = 0;
-                        DescDeHab(desc, t);
-                        Win();
-                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                        tip = random.Next(0, 3);
-                        matriz[playerXX, playerYY] = " ";
-                        switch (keyInfo.Key)
-                        {
-                            case ConsoleKey.UpArrow:
-                                if (matriz[playerXX - 1, playerYY] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerXX = playerXX - 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X" && tramp)
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.DownArrow:
-                                if (matriz[playerXX + 1, playerYY] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerXX = playerXX + 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X" && tramp)
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.LeftArrow:
-                                if (matriz[playerXX, playerYY - 1] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerYY = playerYY - 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X" && tramp)
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.RightArrow:
-                                if (matriz[playerXX, playerYY + 1] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerYY = playerYY + 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X" && tramp)
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.X:
-                                if (hab == 0 && habilidad1 > 0)
+                                if (hab == 0 && habilidad1 > 0 && jug2 == "J")
                                 {
                                     tramp = false;
                                     hab = hab + 1;
@@ -2493,243 +1459,9 @@ public class Laberinto
                     }
                     if (habilidad2 == 0)
                     {
-                        enfriamiento2 = enfriamiento2 + 1;
-                        if (enfriamiento2 == 3) habilidad2 = 3;
-
-                    }
-                }
-                else if (jug2 == "B")
-                {
-                    for (int c = 0; c < 3;)
-                    {
-                        t = 0;
-                        DescDeHab(desc, t);
-                        Win();
-                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                        tip = random.Next(0, 3);
-                        matriz[playerXX, playerYY] = " ";
-                        switch (keyInfo.Key)
-                        {
-                            case ConsoleKey.UpArrow:
-                                if (matriz[playerXX - 1, playerYY] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerXX = playerXX - 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.DownArrow:
-                                if (matriz[playerXX + 1, playerYY] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerXX = playerXX + 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.LeftArrow:
-                                if (matriz[playerXX, playerYY - 1] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerYY = playerYY - 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.RightArrow:
-                                if (matriz[playerXX, playerYY + 1] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerYY = playerYY + 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.X:
-                                if (hab == 0 && habilidad2 > 0)
-                                {
-                                    if (puntos1 != 0)
-                                    {
-                                        puntos2 = puntos2 + 1;
-                                        puntos1 = puntos1 - 1;
-                                        desc = 5;
-                                        habilidad2 = habilidad2 - 1;
-                                    }
-                                    else
-                                    {
-                                        desc = 6;
-                                    }
-
-                                    hab = hab + 1;
-                                }
-                                break;
-                        }
-                        hab = hab + 1;
-
-                        matriz[playerXX, playerYY] = jug2;
-
-                    }
-                    if (habilidad2 == 0)
-                    {
-                        enfriamiento2 = enfriamiento2 + 1;
-                        if (enfriamiento2 == 3) habilidad2 = 3;
+                        if (enf2 == 1) enfriamiento2 = enfriamiento2 + 1;
+                        enf2 = 1;
+                        if (enfriamiento2 == 3) { habilidad2 = 1; enf2 = 0; }
 
                     }
                 }
@@ -2737,13 +1469,14 @@ public class Laberinto
             t = 0;
             hab = 0;
             tramp = true;
-            turnos = !turnos;
+            if (saltarturno == 0) turnos = !turnos;
+            saltarturno = 0;
             if (enfriamiento1 == 3) { enfriamiento1 = 0; }
             if (enfriamiento2 == 3) { enfriamiento2 = 0; }
             if (control1)
             {
                 turnos = !turnos;
-                if (jug2 == "R")
+                if (jug2 == "R" || jug2 == "M" || jug2 == "B")
                 {
                     for (int c = 0; c < 3;)
                     {
@@ -2758,219 +1491,9 @@ public class Laberinto
                             case ConsoleKey.UpArrow:
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
-                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX - 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-
-                                break;
-                            case ConsoleKey.DownArrow:
-                                if (matriz[playerXX + 1, playerYY] != "0")
-                                {
                                     cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerXX = playerXX + 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.LeftArrow:
-                                if (matriz[playerXX, playerYY - 1] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerYY = playerYY - 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.RightArrow:
-                                if (matriz[playerXX, playerYY + 1] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerYY = playerYY + 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                        }
-                        matriz[playerXX, playerYY] = jug2;
-
-                    }
-                }
-                else if (jug2 == "M")
-                {
-                    for (int c = 0; c < 3;)
-                    {
-                        t = 0;
-                        DescDeHab(desc, t);
-                        Win();
-                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                        tip = random.Next(0, 3);
-                        matriz[playerXX, playerYY] = " ";
-                        switch (keyInfo.Key)
-                        {
-                            case ConsoleKey.UpArrow:
-                                if (matriz[playerXX - 1, playerYY] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerXX = playerXX - 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
                                 if (matriz[playerXX, playerYY] == "X")
@@ -3016,9 +1539,9 @@ public class Laberinto
                             case ConsoleKey.DownArrow:
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
-                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX + 1;
+                                    cantpaso2 = cantpaso2 - 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
                                 if (matriz[playerXX, playerYY] == "X")
@@ -3064,9 +1587,9 @@ public class Laberinto
                             case ConsoleKey.LeftArrow:
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
-                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY - 1;
+                                    cantpaso2 = cantpaso2 - 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
                                 if (matriz[playerXX, playerYY] == "X")
@@ -3112,9 +1635,9 @@ public class Laberinto
                             case ConsoleKey.RightArrow:
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
-                                    cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY + 1;
+                                    cantpaso2 = cantpaso2 - 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
                                 if (matriz[playerXX, playerYY] == "X")
@@ -3159,11 +1682,9 @@ public class Laberinto
                                 break;
                         }
                         matriz[playerXX, playerYY] = jug2;
-
                     }
-
                 }
-                else if (jug2 == "S")
+                else if (jug2 == "S" || jug2 == "J")
                 {
                     for (int c = 0; c < 4;)
                     {
@@ -3183,7 +1704,7 @@ public class Laberinto
                                     playerXX = playerXX - 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
+                                if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
                                     switch (tip)
                                     {
@@ -3231,7 +1752,7 @@ public class Laberinto
                                     playerXX = playerXX + 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
+                                if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
                                     switch (tip)
                                     {
@@ -3279,7 +1800,7 @@ public class Laberinto
                                     playerYY = playerYY - 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
+                                if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
                                     switch (tip)
                                     {
@@ -3327,218 +1848,7 @@ public class Laberinto
                                     playerYY = playerYY + 1;
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-
-                        }
-                        matriz[playerXX, playerYY] = jug2;
-
-                    }
-
-                }
-                else if (jug2 == "J")
-                {
-                    for (int c = 0; c < 4;)
-                    {
-                        t = 0;
-                        DescDeHab(desc, t);
-                        Win();
-                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                        tip = random.Next(0, 3);
-                        matriz[playerXX, playerYY] = " ";
-                        switch (keyInfo.Key)
-                        {
-                            case ConsoleKey.UpArrow:
-                                if (matriz[playerXX - 1, playerYY] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerXX = playerXX - 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.DownArrow:
-                                if (matriz[playerXX + 1, playerYY] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerXX = playerXX + 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.LeftArrow:
-                                if (matriz[playerXX, playerYY - 1] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerYY = playerYY - 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.RightArrow:
-                                if (matriz[playerXX, playerYY + 1] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerYY = playerYY + 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
+                                if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
                                     switch (tip)
                                     {
@@ -3579,223 +1889,9 @@ public class Laberinto
                                 }
                                 break;
                         }
-
                         matriz[playerXX, playerYY] = jug2;
 
                     }
-
-                }
-                else if (jug2 == "B")
-                {
-                    for (int c = 0; c < 3;)
-                    {
-                        t = 0;
-                        DescDeHab(desc, t);
-                        Win();
-                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                        tip = random.Next(0, 3);
-                        matriz[playerXX, playerYY] = " ";
-                        switch (keyInfo.Key)
-                        {
-                            case ConsoleKey.UpArrow:
-                                if (matriz[playerXX - 1, playerYY] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerXX = playerXX - 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.DownArrow:
-                                if (matriz[playerXX + 1, playerYY] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerXX = playerXX + 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.LeftArrow:
-                                if (matriz[playerXX, playerYY - 1] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerYY = playerYY - 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.RightArrow:
-                                if (matriz[playerXX, playerYY + 1] != "0")
-                                {
-                                    cantpaso2 = cantpaso2 - 1;
-                                    c = c + 1;
-                                    playerYY = playerYY + 1;
-                                }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
-                                if (matriz[playerXX, playerYY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
-                                                t = 1;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos2 != 0)
-                                                {
-                                                    puntos2 = puntos2 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-
-                        }
-
-                        matriz[playerXX, playerYY] = jug2;
-
-                    }
-
                 }
                 control1 = !control1;
                 hab = 1;
@@ -3803,7 +1899,7 @@ public class Laberinto
             if (control2)
             {
                 turnos = !turnos;
-                if (jug1 == "R")
+                if (jug1 == "R" || jug1 == "M" || jug1 == "B")
                 {
                     for (int c = 0; c < 3;)
                     {
@@ -3819,8 +1915,8 @@ public class Laberinto
                                 if (matriz[playerX - 1, playerY] != "0")
                                 {
                                     playerX = playerX - 1;
-                                    cantpaso1 = cantpaso1 - 1;
                                     c = c + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
 
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
@@ -3835,6 +1931,7 @@ public class Laberinto
                                                 playerX = 2;
                                                 playerY = 2;
                                                 t = 1;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
                                                 Console.ReadKey();
                                             }
@@ -3848,6 +1945,7 @@ public class Laberinto
                                                     t = 2;
                                                 }
                                                 else t = 3;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
                                                 Console.ReadKey();
                                             }
@@ -3869,8 +1967,8 @@ public class Laberinto
                                 if (matriz[playerX + 1, playerY] != "0")
                                 {
                                     c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
                                     playerX = playerX + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -3883,6 +1981,7 @@ public class Laberinto
                                                 playerX = 2;
                                                 playerY = 2;
                                                 t = 1;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
                                                 Console.ReadKey();
                                             }
@@ -3895,7 +1994,9 @@ public class Laberinto
                                                     t = 2;
                                                 }
                                                 else t = 3;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
+                                                Console.ReadKey();
                                             }
                                             break;
                                         case 2:
@@ -3904,7 +2005,6 @@ public class Laberinto
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
-                                                Win();
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -3915,8 +2015,8 @@ public class Laberinto
                                 if (matriz[playerX, playerY - 1] != "0")
                                 {
                                     playerY = playerY - 1;
-                                    c = c + 1;
                                     cantpaso1 = cantpaso1 - 1;
+                                    c = c + 1;
                                 }
 
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
@@ -3930,6 +2030,7 @@ public class Laberinto
                                                 playerX = 2;
                                                 playerY = 2;
                                                 t = 1;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
                                                 Console.ReadKey();
                                             }
@@ -3942,6 +2043,7 @@ public class Laberinto
                                                     t = 2;
                                                 }
                                                 else t = 3;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
                                                 Console.ReadKey();
                                             }
@@ -3977,6 +2079,7 @@ public class Laberinto
                                                 playerX = 2;
                                                 playerY = 2;
                                                 t = 1;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
                                                 Console.ReadKey();
                                             }
@@ -3989,6 +2092,7 @@ public class Laberinto
                                                     t = 2;
                                                 }
                                                 else t = 3;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
                                                 Console.ReadKey();
                                             }
@@ -4006,219 +2110,12 @@ public class Laberinto
                                 }
 
                                 break;
-
                         }
-
-
                         matriz[playerX, playerY] = jug1;
-
                     }
 
                 }
-                else if (jug1 == "M")
-                {
-                    for (int c = 0; c < 3;)
-                    {
-                        t = 0;
-                        DescDeHab(desc, t);
-                        Win();
-                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                        tip = random.Next(0, 3);
-                        matriz[playerX, playerY] = " ";
-                        switch (keyInfo.Key)
-                        {
-                            case ConsoleKey.UpArrow:
-                                if (matriz[playerX - 1, playerY] != "0")
-                                {
-                                    playerX = playerX - 1;
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.DownArrow:
-                                if (matriz[playerX + 1, playerY] != "0")
-                                {
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                    playerX = playerX + 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.LeftArrow:
-                                if (matriz[playerX, playerY - 1] != "0")
-                                {
-                                    playerY = playerY - 1;
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.RightArrow:
-                                if (matriz[playerX, playerY + 1] != "0")
-                                {
-                                    c = c + 1;
-                                    playerY = playerY + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-
-                        }
-                        matriz[playerX, playerY] = jug1;
-
-                    }
-
-                }
-                else if (jug1 == "S")
+                else if (jug1 == "S" || jug1 == "J")
                 {
                     for (int c = 0; c < 4;)
                     {
@@ -4248,6 +2145,7 @@ public class Laberinto
                                                 playerX = 2;
                                                 playerY = 2;
                                                 t = 1;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
                                                 Console.ReadKey();
                                             }
@@ -4280,8 +2178,8 @@ public class Laberinto
                                 if (matriz[playerX + 1, playerY] != "0")
                                 {
                                     c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
                                     playerX = playerX + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -4294,6 +2192,7 @@ public class Laberinto
                                                 playerX = 2;
                                                 playerY = 2;
                                                 t = 1;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
                                                 Console.ReadKey();
                                             }
@@ -4306,6 +2205,7 @@ public class Laberinto
                                                     t = 2;
                                                 }
                                                 else t = 3;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
                                                 Console.ReadKey();
                                             }
@@ -4340,6 +2240,7 @@ public class Laberinto
                                                 playerX = 2;
                                                 playerY = 2;
                                                 t = 1;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
                                                 Console.ReadKey();
                                             }
@@ -4352,6 +2253,7 @@ public class Laberinto
                                                     t = 2;
                                                 }
                                                 else t = 3;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
                                                 Console.ReadKey();
                                             }
@@ -4372,8 +2274,8 @@ public class Laberinto
                                 if (matriz[playerX, playerY + 1] != "0")
                                 {
                                     c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
                                     playerY = playerY + 1;
+                                    cantpaso1 = cantpaso1 - 1;
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "X")
@@ -4386,6 +2288,7 @@ public class Laberinto
                                                 playerX = 2;
                                                 playerY = 2;
                                                 t = 1;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
                                                 Console.ReadKey();
                                             }
@@ -4398,6 +2301,7 @@ public class Laberinto
                                                     t = 2;
                                                 }
                                                 else t = 3;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t);
                                                 Console.ReadKey();
                                             }
@@ -4415,434 +2319,17 @@ public class Laberinto
                                 }
 
                                 break;
-
                         }
                         matriz[playerX, playerY] = jug1;
-
                     }
-
-                }
-                else if (jug1 == "J")
-                {
-                    for (int c = 0; c < 4;)
-                    {
-                        t = 0;
-                        DescDeHab(desc, t);
-                        Win();
-                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                        tip = random.Next(0, 3);
-                        matriz[playerX, playerY] = " ";
-                        switch (keyInfo.Key)
-                        {
-                            case ConsoleKey.UpArrow:
-                                if (matriz[playerX - 1, playerY] != "0")
-                                {
-                                    playerX = playerX - 1;
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.DownArrow:
-                                if (matriz[playerX + 1, playerY] != "0")
-                                {
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                    playerX = playerX + 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.LeftArrow:
-                                if (matriz[playerX, playerY - 1] != "0")
-                                {
-                                    playerY = playerY - 1;
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.RightArrow:
-                                if (matriz[playerX, playerY + 1] != "0")
-                                {
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                    playerY = playerY + 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                        }
-
-                        matriz[playerX, playerY] = jug1;
-
-                    }
-
-                }
-                else if (jug1 == "B")
-                {
-                    for (int c = 0; c < 3;)
-                    {
-                        t = 0;
-                        DescDeHab(desc, t);
-                        Win();
-                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                        tip = random.Next(0, 3);
-                        matriz[playerX, playerY] = " ";
-                        switch (keyInfo.Key)
-                        {
-                            case ConsoleKey.UpArrow:
-                                if (matriz[playerX - 1, playerY] != "0")
-                                {
-                                    playerX = playerX - 1;
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.DownArrow:
-                                if (matriz[playerX + 1, playerY] != "0")
-                                {
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                    playerX = playerX + 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.LeftArrow:
-                                if (matriz[playerX, playerY - 1] != "0")
-                                {
-                                    playerY = playerY - 1;
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case ConsoleKey.RightArrow:
-                                if (matriz[playerX, playerY + 1] != "0")
-                                {
-                                    c = c + 1;
-                                    cantpaso1 = cantpaso1 - 1;
-                                    playerY = playerY + 1;
-                                }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
-                                if (matriz[playerX, playerY] == "X")
-                                {
-                                    switch (tip)
-                                    {
-                                        case 0:
-                                            {
-                                                matriz[playerX, playerY] = " ";
-                                                playerX = 2;
-                                                playerY = 2;
-                                                t = 1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 1:
-                                            {
-                                                if (puntos1 != 0)
-                                                {
-                                                    puntos1 = puntos1 - 1;
-                                                    t = 2;
-                                                }
-                                                else t = 3;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                        case 2:
-                                            {
-                                                c = 10;
-                                                t = 4;
-                                                matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
-                                                Console.ReadKey();
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-
-                        }
-
-                        matriz[playerX, playerY] = jug1;
-
-                    }
-
                 }
                 control2 = !control2;
                 hab = 1;
             }
-            if (jug1 == "R") cantpaso1 = 3;
-            else if (jug1 == "M") cantpaso1 = 3;
-            else if (jug1 == "S") cantpaso1 = 4;
-            else if (jug1 == "J") cantpaso1 = 4;
-            else if (jug1 == "B") cantpaso1 = 3;
-
-            if (jug2 == "R") cantpaso2 = 3;
-            else if (jug2 == "M") cantpaso2 = 3;
-            else if (jug2 == "S") cantpaso2 = 4;
-            else if (jug2 == "J") cantpaso2 = 4;
-            else if (jug2 == "B") cantpaso2 = 3;
+            if (jug1 == "R" || jug1 == "M" || jug1 == "B") cantpaso1 = 3;
+            else if (jug1 == "S" || jug1 == "J") cantpaso1 = 4;
+            if (jug2 == "R" || jug2 == "M" || jug2 == "B") cantpaso2 = 3;
+            else if (jug2 == "S" || jug2 == "J") cantpaso2 = 4;
         }
     }
     //para las diferentes trampas 
