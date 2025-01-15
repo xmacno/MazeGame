@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Configuration.Assemblies;
 using System.Data;
+using System.Diagnostics;
 using System.Formats.Asn1;
 using System.Reflection.Metadata;
 using System.Security.AccessControl;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml;
+using Spectre.Console;
 public class Laberinto
 {
     static int n = 1000;
@@ -40,42 +42,36 @@ public class Laberinto
 
         int k = 0;
         int kk = 0;
-        int op = 0;
+        int op = 1;
         while (k == 0)
         {
 
             while (kk == 0)
             {
-                Console.Clear();
-                Console.WriteLine("> Jugar");
-                Console.WriteLine("  Salir");
+                if (op == 1)
+                {
+                    Console.Clear();
+                    AnsiConsole.MarkupLine("> [green]Jugar[/]");
+                    Console.WriteLine("  Salir");
+                }
+                if (op == 2)
+                {
+                    Console.Clear();
+                    Console.WriteLine("  Jugar");
+                    AnsiConsole.MarkupLine("> [green]Salir[/]");
+                }
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                if (keyInfo.Key == ConsoleKey.Enter) { op = 1; kk = 1; }
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.DownArrow:
-                        Console.Clear();
-                        Console.WriteLine("  Jugar");
-                        Console.WriteLine("> Salir");
-                        ConsoleKeyInfo teclasalir = Console.ReadKey(true);
-                        if (teclasalir.Key == ConsoleKey.Enter)
-                        {
-                            op = 2;
-                            kk = 1;
-                        }
+                        op = 2;
                         break;
                     case ConsoleKey.UpArrow:
-                        Console.Clear();
-                        Console.WriteLine("> Jugar");
-                        Console.WriteLine("  Salir");
-                        ConsoleKeyInfo teclajugar = Console.ReadKey(true);
-                        if (teclajugar.Key == ConsoleKey.Enter)
-                        {
-                            op = 1;
-                            kk = 1;
-                        }
+                        op = 1;
                         break;
-
+                    case ConsoleKey.Enter:
+                        kk = 1;
+                        break;
                 }
             }
 
@@ -111,8 +107,6 @@ public class Laberinto
     //para imprimir el laberinto
     public static void Gameplay()
     {
-
-
         Console.WriteLine("╔═══════════════╦═════════════════╦═════════════════╦═════════════════╦════════════════════╗");
         Console.WriteLine("║   JUGADORES   ║     PUNTOS      ║    CANTIDAD     ║    HABILIDAD    ║   RESTAURACION     ║");
         Console.WriteLine("║               ║                 ║    DE PASOS     ║                 ║ DE LA HABILIDAD    ║");
@@ -178,7 +172,7 @@ public class Laberinto
         }
         else if (habdesc == 1)
         {
-            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A RICK CAMINAR 3 CASILLAS EXTRAS");
+            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A Iron Man CAMINAR 3 CASILLAS EXTRAS");
         }
         else if (habdesc == 2)
         {
@@ -190,7 +184,7 @@ public class Laberinto
         }
         else if (habdesc == 4)
         {
-            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A JERRY SER INMUNE A LAS TRAMPAS");
+            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A Spiderman SER INMUNE A LAS TRAMPAS");
         }
         else if (habdesc == 5)
         {
@@ -348,28 +342,92 @@ public class Laberinto
         int playerXX = n - 3;
         int playerYY = n - 3;
         //jugadores
-
+        int kk = 0;
         int k = 0;
         int opcion = 0;
+        int opcion2 = 0;
         while (k == 0)
         {
-            Console.Clear();
-            Console.WriteLine("Elige un jugador:");
-            Console.WriteLine("1-Rick");
-            Console.WriteLine("2-Morty");
-            Console.WriteLine("3-Somer");
-            Console.WriteLine("4-Jerry");
-            Console.WriteLine("5-Bet");
-            opcion = int.Parse(Console.ReadLine()!);
-
-            if (opcion == 1)
+            while (kk == 0)
             {
-                matriz[playerX, playerY] = "R";
+                if (opcion == 0)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Elige un jugador:");
+                    AnsiConsole.MarkupLine("> [green]Iron Man[/]");
+                    Console.WriteLine("  Capitan America");
+                    Console.WriteLine("  Venom");
+                    Console.WriteLine("  Spiderman");
+                    Console.WriteLine("  Jean Gray");
+                }
+                if (opcion == 1)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Elige un jugador:");
+                    Console.WriteLine("  Iron Man");
+                    AnsiConsole.MarkupLine("> [green]Capitan America[/]");
+                    Console.WriteLine("  Venom");
+                    Console.WriteLine("  Spiderman");
+                    Console.WriteLine("  Jean Gray");
+                }
+                if (opcion == 2)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Elige un jugador:");
+                    Console.WriteLine("  Iron Man");
+                    Console.WriteLine("  Capitan America");
+                    AnsiConsole.MarkupLine("> [green]Venom[/]");
+                    Console.WriteLine("  Spiderman");
+                    Console.WriteLine("  Jean Gray");
+                }
+                if (opcion == 3)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Elige un jugador:");
+                    Console.WriteLine("  Iron Man");
+                    Console.WriteLine("  Capitan America");
+                    Console.WriteLine("  Venom");
+                    AnsiConsole.MarkupLine("> [green]Spiderman[/]");
+                    Console.WriteLine("  Jean Gray");
+                }
+                if (opcion == 4)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Elige un jugador:");
+                    Console.WriteLine("  Iron Man");
+                    Console.WriteLine("  Capitan America");
+                    Console.WriteLine("  Venom");
+                    Console.WriteLine("  Spiderman");
+                    AnsiConsole.MarkupLine("> [green]Bet[/]");
+                }
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.DownArrow:
+                        if (opcion != 4) opcion = opcion + 1;
+                        break;
+                    case ConsoleKey.UpArrow:
+                        if (opcion != 0) opcion = opcion - 1;
+                        break;
+                    case ConsoleKey.Enter:
+                        kk = 1;
+                        break;
+                }
+            }
+
+            if (opcion == 0)
+            {
+                matriz[playerX, playerY] = "I";
+                break;
+            }
+            else if (opcion == 1)
+            {
+                matriz[playerX, playerY] = "C";
                 break;
             }
             else if (opcion == 2)
             {
-                matriz[playerX, playerY] = "M";
+                matriz[playerX, playerY] = "V";
                 break;
             }
             else if (opcion == 3)
@@ -377,15 +435,10 @@ public class Laberinto
                 matriz[playerX, playerY] = "S";
                 break;
             }
+
             else if (opcion == 4)
             {
                 matriz[playerX, playerY] = "J";
-                break;
-            }
-
-            else if (opcion == 5)
-            {
-                matriz[playerX, playerY] = "B";
                 break;
             }
             else
@@ -397,27 +450,88 @@ public class Laberinto
 
         }
 
-
+        kk = 0;
         while (k == 0)
         {
-            Console.Clear();
-            Console.WriteLine("Elige al otro jugador:");
-            Console.WriteLine("1-Rick");
-            Console.WriteLine("2-Morty");
-            Console.WriteLine("3-Somer");
-            Console.WriteLine("4-Jerry");
-            Console.WriteLine("5-Bet");
-
-
-            int opcion2 = int.Parse(Console.ReadLine()!);
-            if (opcion2 == 1 && opcion != opcion2)
+            while (kk == 0)
             {
-                matriz[playerXX, playerYY] = "R";
+                if (opcion2 == 0)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Elige otro jugador:");
+                    AnsiConsole.MarkupLine("> [green]Iron Man[/]");
+                    Console.WriteLine("  Capitan America");
+                    Console.WriteLine("  Venom");
+                    Console.WriteLine("  Spiderman");
+                    Console.WriteLine("  Jean Gray");
+                }
+                if (opcion2 == 1)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Elige otro jugador:");
+                    Console.WriteLine("  Iron Man");
+                    AnsiConsole.MarkupLine("> [green]Capitan America[/]");
+                    Console.WriteLine("  Venom");
+                    Console.WriteLine("  Spiderman");
+                    Console.WriteLine("  Jean Gray");
+                }
+                if (opcion2 == 2)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Elige otro jugador:");
+                    Console.WriteLine("  Iron Man");
+                    Console.WriteLine("  Capitan America");
+                    AnsiConsole.MarkupLine("> [green]Venom[/]");
+                    Console.WriteLine("  Spiderman");
+                    Console.WriteLine("  Jean Gray");
+                }
+                if (opcion2 == 3)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Elige otro jugador:");
+                    Console.WriteLine("  Iron Man");
+                    Console.WriteLine("  Capitan America");
+                    Console.WriteLine("  Venom");
+                    AnsiConsole.MarkupLine("> [green]Spiderman[/]");
+                    Console.WriteLine("  Jean Gray");
+                }
+                if (opcion2 == 4)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Elige otro jugador:");
+                    Console.WriteLine("  Iron Man");
+                    Console.WriteLine("  Capitan America");
+                    Console.WriteLine("  Venom");
+                    Console.WriteLine("  Spiderman");
+                    AnsiConsole.MarkupLine("> [green]Jean Gray[/]");
+                }
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.DownArrow:
+                        if (opcion2 != 4) opcion2 = opcion2 + 1;
+                        break;
+                    case ConsoleKey.UpArrow:
+                        if (opcion2 != 0) opcion2 = opcion2 - 1;
+                        break;
+                    case ConsoleKey.Enter:
+                        kk = 1;
+                        break;
+                }
+            }
+            if (opcion2 == 0 && opcion != opcion2)
+            {
+                matriz[playerXX, playerYY] = "I";
+                break;
+            }
+            else if (opcion2 == 1 && opcion != opcion2)
+            {
+                matriz[playerXX, playerYY] = "C";
                 break;
             }
             else if (opcion2 == 2 && opcion != opcion2)
             {
-                matriz[playerXX, playerYY] = "M";
+                matriz[playerXX, playerYY] = "V";
                 break;
             }
             else if (opcion2 == 3 && opcion != opcion2)
@@ -425,15 +539,10 @@ public class Laberinto
                 matriz[playerXX, playerYY] = "S";
                 break;
             }
+
             else if (opcion2 == 4 && opcion != opcion2)
             {
                 matriz[playerXX, playerYY] = "J";
-                break;
-            }
-
-            else if (opcion2 == 5 && opcion != opcion2)
-            {
-                matriz[playerXX, playerYY] = "B";
                 break;
             }
             else
@@ -473,10 +582,10 @@ public class Laberinto
         int enf = 0;
         int enf2 = 0;
         //para la tabla lps pasos
-        if (jug1 == "R" || jug1 == "M" || jug1 == "B") cantpaso1 = 3;
-        else if (jug1 == "S" || jug1 == "J") cantpaso1 = 4;
-        if (jug2 == "R" || jug2 == "M" || jug2 == "B") cantpaso2 = 3;
-        else if (jug2 == "S" || jug2 == "J") cantpaso2 = 4;
+        if (jug1 == "I" || jug1 == "C" || jug1 == "J") cantpaso1 = 3;
+        else if (jug1 == "V" || jug1 == "S") cantpaso1 = 4;
+        if (jug2 == "I" || jug2 == "C" || jug2 == "J") cantpaso2 = 3;
+        else if (jug2 == "V" || jug2 == "S") cantpaso2 = 4;
 
         while (true)
         {
@@ -484,7 +593,7 @@ public class Laberinto
             t = 0;
             if (turnos)
             {
-                if (jug1 == "R" || jug1 == "M" || jug1 == "B")
+                if (jug1 == "I" || jug1 == "C" || jug1 == "J")
                 {
                     for (int c = 0; c < 3;)
                     {
@@ -696,7 +805,7 @@ public class Laberinto
 
                                 break;
                             case ConsoleKey.X:
-                                if (hab == 0 && habilidad1 > 0 && jug1 == "R")
+                                if (hab == 0 && habilidad1 > 0 && jug1 == "I")
                                 {
                                     cantpaso1 = cantpaso1 + 3;
                                     c = c - 3;
@@ -705,14 +814,14 @@ public class Laberinto
                                     hab = hab + 1;
 
                                 }
-                                if (hab == 0 && habilidad1 > 0 && jug1 == "M")
+                                if (hab == 0 && habilidad1 > 0 && jug1 == "C")
                                 {
                                     saltarturno = 1;
                                     habilidad1 = habilidad1 - 1;
                                     desc = 2;
                                     hab = hab + 1;
                                 }
-                                if (hab == 0 && habilidad1 > 0 && jug1 == "B")
+                                if (hab == 0 && habilidad1 > 0 && jug1 == "J")
                                 {
                                     if (puntos2 != 0)
                                     {
@@ -736,15 +845,15 @@ public class Laberinto
                     }
                     if (habilidad1 == 0)
                     {
-                        if (enf == 1 && jug1 != "M") enfriamiento1 = enfriamiento1 + 1;
-                        if (jug1 != "M") enf = 1;
+                        if (enf == 1 && jug1 != "C") enfriamiento1 = enfriamiento1 + 1;
+                        if (jug1 != "C") enf = 1;
                         if (enf == 2) enfriamiento1 = enfriamiento1 + 1;
-                        if (jug1 == "M" && enf < 2) enf = enf + 1;
+                        if (jug1 == "C" && enf < 2) enf = enf + 1;
                         if (enfriamiento1 == 3) { habilidad1 = 1; enf = 0; }
 
                     }
                 }
-                else if (jug1 == "S" || jug1 == "J")
+                else if (jug1 == "V" || jug1 == "S")
                 {
                     for (int c = 0; c < 4;)
                     {
@@ -949,7 +1058,7 @@ public class Laberinto
 
                                 break;
                             case ConsoleKey.X:
-                                if (hab == 0 && habilidad1 > 0 && jug1 == "S")
+                                if (hab == 0 && habilidad1 > 0 && jug1 == "V")
                                 {
                                     control1 = !control1;
                                     c = 5;
@@ -957,7 +1066,7 @@ public class Laberinto
                                     desc = 3;
                                     hab = hab + 1;
                                 }
-                                if (hab == 0 && habilidad1 > 0 && jug1 == "J")
+                                if (hab == 0 && habilidad1 > 0 && jug1 == "S")
                                 {
                                     tramp = false;
                                     hab = hab + 1;
@@ -980,7 +1089,7 @@ public class Laberinto
             }
             else
             {
-                if (jug2 == "R" || jug2 == "M" || jug2 == "B")
+                if (jug2 == "I" || jug2 == "C" || jug2 == "J")
                 {
                     for (int c = 0; c < 3;)
                     {
@@ -1185,7 +1294,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.X:
-                                if (hab == 0 && habilidad2 > 0 && jug2 == "R")
+                                if (hab == 0 && habilidad2 > 0 && jug2 == "I")
                                 {
                                     cantpaso2 = cantpaso2 + 3;
                                     c = c - 3;
@@ -1193,14 +1302,14 @@ public class Laberinto
                                     desc = 1;
                                     hab = hab + 1;
                                 }
-                                if (hab == 0 && habilidad2 > 0 && jug2 == "M")
+                                if (hab == 0 && habilidad2 > 0 && jug2 == "C")
                                 {
                                     saltarturno = 1;
                                     habilidad2 = habilidad2 - 1;
                                     desc = 2;
                                     hab = hab + 1;
                                 }
-                                if (hab == 0 && habilidad2 > 0 && jug2 == "B")
+                                if (hab == 0 && habilidad2 > 0 && jug2 == "J")
                                 {
                                     if (puntos1 != 0)
                                     {
@@ -1224,15 +1333,15 @@ public class Laberinto
                     }
                     if (habilidad2 == 0)
                     {
-                        if (enf2 == 1 && jug2 != "M") enfriamiento2 = enfriamiento2 + 1;
-                        if (jug2 != "M") enf2 = 1;
+                        if (enf2 == 1 && jug2 != "C") enfriamiento2 = enfriamiento2 + 1;
+                        if (jug2 != "C") enf2 = 1;
                         if (enf2 == 2) enfriamiento2 = enfriamiento2 + 1;
-                        if (jug2 == "M" && enf2 < 2) enf2 = enf2 + 1;
+                        if (jug2 == "C" && enf2 < 2) enf2 = enf2 + 1;
                         if (enfriamiento2 == 3) { habilidad2 = 1; enf2 = 0; }
 
                     }
                 }
-                else if (jug2 == "S" || jug2 == "J")
+                else if (jug2 == "V" || jug2 == "S")
                 {
                     for (int c = 0; c < 4;)
                     {
@@ -1437,7 +1546,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.X:
-                                if (hab == 0 && habilidad2 > 0 && jug2 == "S")
+                                if (hab == 0 && habilidad2 > 0 && jug2 == "V")
                                 {
                                     control2 = !control2;
                                     c = 5;
@@ -1445,7 +1554,7 @@ public class Laberinto
                                     desc = 3;
                                     hab = hab + 1;
                                 }
-                                if (hab == 0 && habilidad1 > 0 && jug2 == "J")
+                                if (hab == 0 && habilidad1 > 0 && jug2 == "S")
                                 {
                                     tramp = false;
                                     hab = hab + 1;
@@ -1476,7 +1585,7 @@ public class Laberinto
             if (control1)
             {
                 turnos = !turnos;
-                if (jug2 == "R" || jug2 == "M" || jug2 == "B")
+                if (jug2 == "I" || jug2 == "C" || jug2 == "J")
                 {
                     for (int c = 0; c < 3;)
                     {
@@ -1684,7 +1793,7 @@ public class Laberinto
                         matriz[playerXX, playerYY] = jug2;
                     }
                 }
-                else if (jug2 == "S" || jug2 == "J")
+                else if (jug2 == "V" || jug2 == "S")
                 {
                     for (int c = 0; c < 4;)
                     {
@@ -1899,7 +2008,7 @@ public class Laberinto
             if (control2)
             {
                 turnos = !turnos;
-                if (jug1 == "R" || jug1 == "M" || jug1 == "B")
+                if (jug1 == "I" || jug1 == "C" || jug1 == "J")
                 {
                     for (int c = 0; c < 3;)
                     {
@@ -2115,7 +2224,7 @@ public class Laberinto
                     }
 
                 }
-                else if (jug1 == "S" || jug1 == "J")
+                else if (jug1 == "V" || jug1 == "S")
                 {
                     for (int c = 0; c < 4;)
                     {
@@ -2326,10 +2435,10 @@ public class Laberinto
                 control2 = !control2;
                 hab = 1;
             }
-            if (jug1 == "R" || jug1 == "M" || jug1 == "B") cantpaso1 = 3;
-            else if (jug1 == "S" || jug1 == "J") cantpaso1 = 4;
-            if (jug2 == "R" || jug2 == "M" || jug2 == "B") cantpaso2 = 3;
-            else if (jug2 == "S" || jug2 == "J") cantpaso2 = 4;
+            if (jug1 == "I" || jug1 == "C" || jug1 == "J") cantpaso1 = 3;
+            else if (jug1 == "V" || jug1 == "S") cantpaso1 = 4;
+            if (jug2 == "I" || jug2 == "C" || jug2 == "J") cantpaso2 = 3;
+            else if (jug2 == "V" || jug2 == "S") cantpaso2 = 4;
         }
     }
     //para las diferentes trampas 
