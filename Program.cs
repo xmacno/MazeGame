@@ -8,6 +8,7 @@ using System.Security.AccessControl;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml;
 using Spectre.Console;
+using System.Media;
 public class Laberinto
 {
     static int n = 1000;
@@ -22,8 +23,6 @@ public class Laberinto
     static int enfriamiento2 = 0;
     static int cantpaso1 = 0;
     static int cantpaso2 = 0;
-
-
     static void Main()
     {
         for (int i = 0; i < n; i++)
@@ -33,13 +32,13 @@ public class Laberinto
                 matriz[i, j] = "0";
             }
         }
+        Console.Title = "EN BUSACA DE LAS GEMAS";
         Menu();
 
 
     }
     public static void Menu()
     {
-
         int k = 0;
         int kk = 0;
         int op = 1;
@@ -50,13 +49,33 @@ public class Laberinto
             {
                 if (op == 1)
                 {
+
+
                     Console.Clear();
+                    Console.WriteLine(" ");
+                    AnsiConsole.MarkupLine("[green]▄█████░██████▄░░░█████▄░██░░░██░▄██████░▄█████░▄████▄░░░██████▄░▄█████░░░██░░░░░▄████▄░▄██████░░░▄██████░▄█████░▄██▄▄██▄░▄████▄░▄██████[/]");
+                    AnsiConsole.MarkupLine("[green]██░░░░░██░░░██░░░██░░██░██░░░██░██░░░░░░██░░░░░██░░██░░░██░░░██░██░░░░░░░██░░░░░██░░██░██░░░░░░░░██░░░░░░██░░░░░██░██░██░██░░██░██░░░░░[/]");
+                    AnsiConsole.MarkupLine("[green]█████░░██░░░██░░░█████░░██░░░██░▀█████▄░██░░░░░██░░██░░░██░░░██░█████░░░░██░░░░░██░░██░▀█████▄░░░██░░███░█████░░██░██░██░██░░██░▀█████▄[/]");
+                    AnsiConsole.MarkupLine("[green]██░░░░░██░░░██░░░██░░██░██░░░██░░░░░░██░██░░░░░██████░░░██░░░██░██░░░░░░░██░░░░░██████░░░░░░██░░░██░░░██░██░░░░░██░██░██░██████░░░░░░██[/]");
+                    AnsiConsole.MarkupLine("[green]▀█████░██░░░██░░░█████▀░▀█████▀░██████▀░▀█████░██░░██░░░██████▀░▀█████░░░██████░██░░██░██████▀░░░▀█████▀░▀█████░██░██░██░██░░██░██████▀[/]");
+                    AnsiConsole.MarkupLine("[green]░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░[/]");
+                    Console.WriteLine(" ");
+                    Console.WriteLine(" ");
                     AnsiConsole.MarkupLine("> [green]Jugar[/]");
                     Console.WriteLine("  Salir");
                 }
                 if (op == 2)
                 {
                     Console.Clear();
+                    Console.WriteLine(" ");
+                    AnsiConsole.MarkupLine("[green]    ▄█████░██████▄░░░█████▄░██░░░██░▄██████░▄█████░▄████▄░░░██████▄░▄█████░░░██░░░░░▄████▄░▄██████░░░▄██████░▄█████░▄██▄▄██▄░▄████▄░▄██████[/]");
+                    AnsiConsole.MarkupLine("[green]    ██░░░░░██░░░██░░░██░░██░██░░░██░██░░░░░░██░░░░░██░░██░░░██░░░██░██░░░░░░░██░░░░░██░░██░██░░░░░░░░██░░░░░░██░░░░░██░██░██░██░░██░██░░░░░[/]");
+                    AnsiConsole.MarkupLine("[green]    █████░░██░░░██░░░█████░░██░░░██░▀█████▄░██░░░░░██░░██░░░██░░░██░█████░░░░██░░░░░██░░██░▀█████▄░░░██░░███░█████░░██░██░██░██░░██░▀█████▄[/]");
+                    AnsiConsole.MarkupLine("[green]    ██░░░░░██░░░██░░░██░░██░██░░░██░░░░░░██░██░░░░░██████░░░██░░░██░██░░░░░░░██░░░░░██████░░░░░░██░░░██░░░██░██░░░░░██░██░██░██████░░░░░░██[/]");
+                    AnsiConsole.MarkupLine("[green]    ▀█████░██░░░██░░░█████▀░▀█████▀░██████▀░▀█████░██░░██░░░██████▀░▀█████░░░██████░██░░██░██████▀░░░▀█████▀░▀█████░██░██░██░██░░██░██████▀[/]");
+                    AnsiConsole.MarkupLine("[green]    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░[/]");
+                    Console.WriteLine(" ");
+                    Console.WriteLine(" ");
                     Console.WriteLine("  Jugar");
                     AnsiConsole.MarkupLine("> [green]Salir[/]");
                 }
