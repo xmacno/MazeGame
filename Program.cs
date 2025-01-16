@@ -77,17 +77,13 @@ public class Laberinto
 
             if (op == 1)
             {
-                Console.Clear();
-                Console.WriteLine("Elija las dimensiones (N x N) del mapa en el que desea jugar");
-                n = int.Parse(Console.ReadLine()!);
+                n = TamDelLab();
                 m = n;
-
                 Camino();
                 Tranpas();
                 Points();
                 Jugadores();
                 MovJug();
-                Gameplay();
                 break;
             }
             else if (op == 2)
@@ -104,8 +100,121 @@ public class Laberinto
             }
         }
     }
+    //para elegir un tamaño del laberinto
+    public static int TamDelLab()
+    {
+        Random random = new Random();
+        for (int i = 1; i > 0;)
+        {
+            int kk = 0;
+            int tam = 0;
+            while (kk == 0)
+            {
+                Console.Clear();
+                if (tam == 0)
+                {
+                    Console.WriteLine("Elija una dimension (N x N) aproximada del mapa en el que desea jugar");
+                    AnsiConsole.MarkupLine("> [green]12-20[/]");
+                    Console.WriteLine("  20-25");
+                    Console.WriteLine("  25-30");
+                    Console.WriteLine("  30-40");
+                }
+                if (tam == 1)
+                {
+                    Console.WriteLine("Elija una dimension (N x N) aproximada del mapa en el que desea jugar");
+                    Console.WriteLine("  12-20");
+                    AnsiConsole.MarkupLine("> [green]20-25[/]");
+                    Console.WriteLine("  25-30");
+                    Console.WriteLine("  30-40");
+                }
+                if (tam == 2)
+                {
+                    Console.WriteLine("Elija una dimension (N x N) aproximada del mapa en el que desea jugar");
+                    Console.WriteLine("  12-20");
+                    Console.WriteLine("  20-25");
+                    AnsiConsole.MarkupLine("> [green]25-30[/]");
+                    Console.WriteLine("  30-40");
+                }
+                if (tam == 3)
+                {
+                    Console.WriteLine("Elija una dimension (N x N) aproximada del mapa en el que desea jugar");
+                    Console.WriteLine("  12-20");
+                    Console.WriteLine("  20-25");
+                    Console.WriteLine("  25-30");
+                    AnsiConsole.MarkupLine("> [green]30-40[/]");
+                }
+                DescTamDelLab(tam);
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.DownArrow:
+                        if (tam != 3) tam = tam + 1;
+                        break;
+                    case ConsoleKey.UpArrow:
+                        if (tam != 0) tam = tam - 1;
+                        break;
+                    case ConsoleKey.Enter:
+                        kk = 1;
+                        break;
+                }
+            }
+
+            if (tam == 0)
+            {
+                int ran = random.Next(12, 21);
+                return ran;
+            }
+            else if (tam == 1)
+            {
+                int ran = random.Next(20, 26);
+                return ran;
+            }
+            else if (tam == 2)
+            {
+                int ran = random.Next(25, 30);
+                return ran;
+            }
+            else
+            {
+                int ran = random.Next(30, 40);
+                return ran;
+            }
+
+        }
+        return 0;
+    }
+    //este es para que salga una descripcion sobre el tamano del laberinto
+    public static void DescTamDelLab(int c)
+    {
+        Console.WriteLine(" ");
+        Console.WriteLine(" ");
+        Console.WriteLine(" ");
+        Console.ForegroundColor = ConsoleColor.Green;
+        if (c == 0)
+        {
+            Console.WriteLine("-TAMAÑO: CHICO ");
+            Console.WriteLine("-RECOMENDACION: PARA PROBAR ");
+        }
+        else if (c == 1)
+        {
+            Console.WriteLine("-TAMAÑO: ESTANDAR ");
+            Console.WriteLine("-RECOMENDACION: PARA PROBAR UNA PARTIDA NORMAL ");
+        }
+        else if (c == 2)
+        {
+            Console.WriteLine("-TAMAÑO: GRANDE ");
+            Console.WriteLine("-RECOMENDACION: PUEDE DEMORAR UN POCO MAS LAS PARTIDAD EN ESTE MAPA ");
+        }
+        else if (c == 3)
+        {
+            Console.WriteLine("-TAMAÑO: MUY GRANDE ");
+            Console.WriteLine("-RECOMENDACION: PARA UNA PARTIDAD DE MAYOR DURACION ");
+        }
+
+        Console.ResetColor();
+    }
     //para imprimir el laberinto
-    public static void Gameplay()
+    public static void Gameplay(string jug)
     {
         Console.WriteLine("╔═══════════════╦═════════════════╦═════════════════╦═════════════════╦════════════════════╗");
         Console.WriteLine("║   JUGADORES   ║     PUNTOS      ║    CANTIDAD     ║    HABILIDAD    ║   RESTAURACION     ║");
@@ -114,23 +223,23 @@ public class Laberinto
         if (turnos)
         {
             Console.BackgroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine("║   JUGADOR 1   ║ " + puntos1 + "               ║ " + cantpaso1 + "               ║  " + habilidad1 + "              ║ " + enfriamiento1 + "                  ║");
+            Console.WriteLine("║   JUGADOR 1   ║ " + puntos1 + "               ║ " + cantpaso1 + "               ║  " + habilidad1 + "              ║ " + enfriamiento1 + "/3                ║");
             Console.ResetColor();
         }
         else
         {
-            Console.WriteLine("║   JUGADOR 1   ║ " + puntos1 + "               ║ " + cantpaso1 + "               ║  " + habilidad1 + "              ║ " + enfriamiento1 + "                  ║");
+            Console.WriteLine("║   JUGADOR 1   ║ " + puntos1 + "               ║ " + cantpaso1 + "               ║  " + habilidad1 + "              ║ " + enfriamiento1 + "/3                ║");
         }
         Console.WriteLine("╠═══════════════╬═════════════════╬═════════════════╬═════════════════╬════════════════════╣");
         if (turnos == false)
         {
             Console.BackgroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine("║   JUGADOR 2   ║ " + puntos2 + "               ║ " + cantpaso2 + "               ║  " + habilidad2 + "              ║ " + enfriamiento2 + "                  ║");
+            Console.WriteLine("║   JUGADOR 2   ║ " + puntos2 + "               ║ " + cantpaso2 + "               ║  " + habilidad2 + "              ║ " + enfriamiento2 + "/3                ║");
             Console.ResetColor();
         }
         else
         {
-            Console.WriteLine("║   JUGADOR 2   ║ " + puntos2 + "               ║ " + cantpaso2 + "               ║  " + habilidad2 + "              ║ " + enfriamiento2 + "                  ║");
+            Console.WriteLine("║   JUGADOR 2   ║ " + puntos2 + "               ║ " + cantpaso2 + "               ║  " + habilidad2 + "              ║ " + enfriamiento2 + "/3                ║");
         }
         Console.WriteLine("╚═══════════════╩═════════════════╩═════════════════╩═════════════════╩════════════════════╝");
 
@@ -147,8 +256,9 @@ public class Laberinto
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
-                if (matriz[i, j] == "")
+                if (matriz[i, j] == jug)
                 {
+                    Console.ForegroundColor = ConsoleColor.Green;
 
                 }
                 Console.Write(matriz[i, j]);
@@ -162,39 +272,43 @@ public class Laberinto
         }
 
     }
-    public static void DescDeHab(int habdesc, int t)
+    //para cuando el personaje use la hablidad te pone lo que hace
+    public static void DescDeHab(int habdesc, int t, string jug)
     {
         Console.Clear();
-        Gameplay();
+        Gameplay(jug);
+        Console.ForegroundColor = ConsoleColor.Green;
         if (habdesc == 0)
         {
 
         }
         else if (habdesc == 1)
         {
-            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A Iron Man CAMINAR 3 CASILLAS EXTRAS");
+            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A IRON MAN UTILIZAR SU TRAJE PARA IMPULSARCE Y CAMINAR 3 CASILLAS EXTRAS");
         }
         else if (habdesc == 2)
         {
-            Console.WriteLine("LA HABILIDAD ESCOGINA SALTA EL TURNO DEL OTRO JUGADOR");
+            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE AL CAPITAN AMERICA ATURDIR AL ALVERSARIO CON SU ESCUDO Y SALTAR UN TURNO");
         }
         else if (habdesc == 3)
         {
-            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE CONTROLAR A TU OPONENTE POR UN TURNO");
+            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A VENOM USAR UN SIMBIONTE PARA CONTROLAR A TU OPONENTE POR UN TURNO");
         }
         else if (habdesc == 4)
         {
-            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A Spiderman SER INMUNE A LAS TRAMPAS");
+            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A SPIDERMAN COLUMPIARSE SOBRE LAS TRAMPAS ( INMUNE A LAS TRAMPAS)");
         }
         else if (habdesc == 5)
         {
-            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE TOMAR UNO DE LOS PUNTOS DE TU OPONENTE ");
+            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A JEAN GRAY USAR SU TELEQUINESIS PARA TOMAR UNA DE LAS GEMAS DE TU OPONENTE ");
         }
         else if (habdesc == 6)
         {
-            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE TOMAR UNO DE LOS PUNTOS DE TU OPONENTE (SU OPONENTE NO TENIA PUNTOS) ");
+            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A JEAN GRAY USAR SU TELEQUINESIS PARA TOMAR UNA DE LAS GEMAS DE TU OPONENTE ( su oponente no tiene gemas ) ");
         }
+        Console.ResetColor();
         FuncTranpas(t);
+
     }
     //este metodo es para habilitar las casillas del alrrededor
     public static void Paso(int x, int y)
@@ -350,9 +464,10 @@ public class Laberinto
         {
             while (kk == 0)
             {
+
+                Console.Clear();
                 if (opcion == 0)
                 {
-                    Console.Clear();
                     Console.WriteLine("Elige un jugador:");
                     AnsiConsole.MarkupLine("> [green]Iron Man[/]");
                     Console.WriteLine("  Capitan America");
@@ -362,7 +477,6 @@ public class Laberinto
                 }
                 if (opcion == 1)
                 {
-                    Console.Clear();
                     Console.WriteLine("Elige un jugador:");
                     Console.WriteLine("  Iron Man");
                     AnsiConsole.MarkupLine("> [green]Capitan America[/]");
@@ -372,7 +486,6 @@ public class Laberinto
                 }
                 if (opcion == 2)
                 {
-                    Console.Clear();
                     Console.WriteLine("Elige un jugador:");
                     Console.WriteLine("  Iron Man");
                     Console.WriteLine("  Capitan America");
@@ -382,7 +495,6 @@ public class Laberinto
                 }
                 if (opcion == 3)
                 {
-                    Console.Clear();
                     Console.WriteLine("Elige un jugador:");
                     Console.WriteLine("  Iron Man");
                     Console.WriteLine("  Capitan America");
@@ -392,14 +504,14 @@ public class Laberinto
                 }
                 if (opcion == 4)
                 {
-                    Console.Clear();
                     Console.WriteLine("Elige un jugador:");
                     Console.WriteLine("  Iron Man");
                     Console.WriteLine("  Capitan America");
                     Console.WriteLine("  Venom");
                     Console.WriteLine("  Spiderman");
-                    AnsiConsole.MarkupLine("> [green]Bet[/]");
+                    AnsiConsole.MarkupLine("> [green]Jean Gray[/]");
                 }
+                DescJugadores(opcion);
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 switch (keyInfo.Key)
                 {
@@ -441,12 +553,6 @@ public class Laberinto
                 matriz[playerX, playerY] = "J";
                 break;
             }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine("Utilice una de las anteriores opciones");
-                Console.ReadKey();
-            }
 
         }
 
@@ -455,9 +561,9 @@ public class Laberinto
         {
             while (kk == 0)
             {
+                Console.Clear();
                 if (opcion2 == 0)
                 {
-                    Console.Clear();
                     Console.WriteLine("Elige otro jugador:");
                     AnsiConsole.MarkupLine("> [green]Iron Man[/]");
                     Console.WriteLine("  Capitan America");
@@ -467,7 +573,6 @@ public class Laberinto
                 }
                 if (opcion2 == 1)
                 {
-                    Console.Clear();
                     Console.WriteLine("Elige otro jugador:");
                     Console.WriteLine("  Iron Man");
                     AnsiConsole.MarkupLine("> [green]Capitan America[/]");
@@ -477,7 +582,6 @@ public class Laberinto
                 }
                 if (opcion2 == 2)
                 {
-                    Console.Clear();
                     Console.WriteLine("Elige otro jugador:");
                     Console.WriteLine("  Iron Man");
                     Console.WriteLine("  Capitan America");
@@ -487,7 +591,6 @@ public class Laberinto
                 }
                 if (opcion2 == 3)
                 {
-                    Console.Clear();
                     Console.WriteLine("Elige otro jugador:");
                     Console.WriteLine("  Iron Man");
                     Console.WriteLine("  Capitan America");
@@ -497,7 +600,6 @@ public class Laberinto
                 }
                 if (opcion2 == 4)
                 {
-                    Console.Clear();
                     Console.WriteLine("Elige otro jugador:");
                     Console.WriteLine("  Iron Man");
                     Console.WriteLine("  Capitan America");
@@ -505,6 +607,8 @@ public class Laberinto
                     Console.WriteLine("  Spiderman");
                     AnsiConsole.MarkupLine("> [green]Jean Gray[/]");
                 }
+                DescJugadores(opcion2);
+
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 switch (keyInfo.Key)
                 {
@@ -515,7 +619,15 @@ public class Laberinto
                         if (opcion2 != 0) opcion2 = opcion2 - 1;
                         break;
                     case ConsoleKey.Enter:
-                        kk = 1;
+                        if (opcion != opcion2) kk = 1;
+                        else
+                        {
+                            Console.Clear();
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("No puede coger el mismo personaje, utilice una de las anteriores opciones");
+                            Console.ResetColor();
+                            Console.ReadKey();
+                        }
                         break;
                 }
             }
@@ -545,14 +657,71 @@ public class Laberinto
                 matriz[playerXX, playerYY] = "J";
                 break;
             }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine("Utilice una de las anteriores opciones");
-                Console.ReadKey();
-            }
-
         }
+        Historia();
+    }
+    //historia del juego 
+    public static void Historia()
+    {
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.DarkBlue;
+        int c = 0;
+        string hist = "LAS GEMAS DEL INFINITO SON SEIS: MENTE, ALMA, ESPACIO, PODER, TIEMPO Y REALIDAD.EN ESTE MULTIVERSO EN EL QUE SE ENCUNTRAN SE HA ALTERADO LA REALIDAD POR LO QUE AHORA EXISTEN MAS DE SEIS GEMAS. SU OBJETIVO ES AGARRAR SEIS DE ESTAS GEMAS PARA PODER VOLVER A TU REALIDAD. SUERTE";
+        for (int t = 0; t < hist.Length; t++)
+        {
+            Thread.Sleep(20);
+            if (t >= Console.WindowWidth - 12 && hist[t] == ' ' && c == 0)
+            {
+                Console.WriteLine(" ");
+                c = 1;
+            }
+            Console.Write(hist[t]);
+        }
+        Console.WriteLine(" ");
+        Console.ResetColor();
+        Console.WriteLine("                                                                      presione una tecla para comenzar");
+        Console.ReadKey();
+    }
+    //este metodo es para mostrar lo que hace cada jugador
+    public static void DescJugadores(int c)
+    {
+        Console.WriteLine(" ");
+        Console.WriteLine(" ");
+        Console.WriteLine(" ");
+        Console.ForegroundColor = ConsoleColor.Green;
+        if (c == 0)
+        {
+            Console.WriteLine("IRON MAN ");
+            Console.WriteLine("-VELOCIDAD: 3 PASOS POR TURNO");
+            Console.WriteLine("-HABILIDAD: UTILIZAR SU TRAJE PARA IMPULSARCE Y CAMINAR 3 CASILLAS EXTRAS");
+        }
+        else if (c == 1)
+        {
+            Console.WriteLine("CAPITAN AMERICA");
+            Console.WriteLine("-VELOCIDAD: 3 PASOS POR TURNO");
+            Console.WriteLine("-HABILIDAD: ATURDIR AL ALVERSARIO CON SU ESCUDO Y SALTAR UN TURNO");
+        }
+        else if (c == 2)
+        {
+            Console.WriteLine("VENOM");
+            Console.WriteLine("-VELOCIDAD: 4 PASOS POR TURNO");
+            Console.WriteLine("-HABILIDAD: USAR UN SIMBIONTE PARA CONTROLAR A SU OPONENTE POR UN TURNO");
+        }
+        else if (c == 3)
+        {
+            Console.WriteLine("SPIDERMAN");
+            Console.WriteLine("-VELOCIDAD: 4 PASOS POR TURNO");
+            Console.WriteLine("-HABILIDAD: COLUMPIARSE SOBRE LAS TRAMPAS ( INMUNE A LAS TRAMPAS)");
+        }
+        else if (c == 4)
+        {
+            Console.WriteLine("JEAN GRAY");
+            Console.WriteLine("-VELOCIDAD: 3 PASOS POR TURNO");
+            Console.WriteLine("-HABILIDAD: USA SU TELEQUINESIS PARA TOMAR UNA DE LAS GEMAS DE SU OPONENTE");
+        }
+
+        Console.ResetColor();
+
     }
     //esta clase es para dar mov a los jugadores por turnos 
     public static void MovJug()
@@ -598,7 +767,7 @@ public class Laberinto
                     for (int c = 0; c < 3;)
                     {
                         t = 0;
-                        DescDeHab(desc, t);
+                        DescDeHab(desc, t, jug1);
                         Win();
                         ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                         matriz[playerX, playerY] = " ";
@@ -608,6 +777,7 @@ public class Laberinto
                             case ConsoleKey.UpArrow:
                                 if (matriz[playerX - 1, playerY] != "0")
                                 {
+                                    hab = hab + 1;
                                     playerX = playerX - 1;
                                     c = c + 1;
                                     cantpaso1 = cantpaso1 - 1;
@@ -626,7 +796,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -640,7 +810,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -650,7 +820,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -660,6 +830,7 @@ public class Laberinto
                             case ConsoleKey.DownArrow:
                                 if (matriz[playerX + 1, playerY] != "0")
                                 {
+                                    hab = hab + 1;
                                     c = c + 1;
                                     playerX = playerX + 1;
                                     cantpaso1 = cantpaso1 - 1;
@@ -676,7 +847,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -689,7 +860,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -698,7 +869,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -708,6 +879,7 @@ public class Laberinto
                             case ConsoleKey.LeftArrow:
                                 if (matriz[playerX, playerY - 1] != "0")
                                 {
+                                    hab = hab + 1;
                                     playerY = playerY - 1;
                                     cantpaso1 = cantpaso1 - 1;
                                     c = c + 1;
@@ -725,7 +897,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -738,7 +910,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -747,7 +919,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Win();
                                                 Console.ReadKey();
                                             }
@@ -758,6 +930,7 @@ public class Laberinto
                             case ConsoleKey.RightArrow:
                                 if (matriz[playerX, playerY + 1] != "0")
                                 {
+                                    hab = hab + 1;
                                     c = c + 1;
                                     playerY = playerY + 1;
                                     cantpaso1 = cantpaso1 - 1;
@@ -774,7 +947,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -787,7 +960,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -796,7 +969,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -839,7 +1012,6 @@ public class Laberinto
                                 }
                                 break;
                         }
-                        hab = hab + 1;
                         matriz[playerX, playerY] = jug1;
 
                     }
@@ -858,7 +1030,7 @@ public class Laberinto
                     for (int c = 0; c < 4;)
                     {
                         t = 0;
-                        DescDeHab(desc, t);
+                        DescDeHab(desc, t, jug1);
                         Win();
                         ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                         tip = random.Next(0, 3);
@@ -868,6 +1040,7 @@ public class Laberinto
                             case ConsoleKey.UpArrow:
                                 if (matriz[playerX - 1, playerY] != "0")
                                 {
+                                    hab = hab + 1;
                                     playerX = playerX - 1;
                                     c = c + 1;
                                     cantpaso1 = cantpaso1 - 1;
@@ -884,7 +1057,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -896,7 +1069,7 @@ public class Laberinto
                                                     t = 2;
                                                 }
                                                 else t = 3;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -905,7 +1078,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -915,6 +1088,7 @@ public class Laberinto
                             case ConsoleKey.DownArrow:
                                 if (matriz[playerX + 1, playerY] != "0")
                                 {
+                                    hab = hab + 1;
                                     c = c + 1;
                                     playerX = playerX + 1;
                                     cantpaso1 = cantpaso1 - 1;
@@ -931,7 +1105,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -944,7 +1118,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -953,7 +1127,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -963,6 +1137,7 @@ public class Laberinto
                             case ConsoleKey.LeftArrow:
                                 if (matriz[playerX, playerY - 1] != "0")
                                 {
+                                    hab = hab + 1;
                                     playerY = playerY - 1;
                                     c = c + 1;
                                     cantpaso1 = cantpaso1 - 1;
@@ -979,7 +1154,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -992,7 +1167,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1001,7 +1176,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1011,6 +1186,7 @@ public class Laberinto
                             case ConsoleKey.RightArrow:
                                 if (matriz[playerX, playerY + 1] != "0")
                                 {
+                                    hab = hab + 1;
                                     c = c + 1;
                                     playerY = playerY + 1;
                                     cantpaso1 = cantpaso1 - 1;
@@ -1027,7 +1203,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1040,7 +1216,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1049,7 +1225,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1074,7 +1250,6 @@ public class Laberinto
                                 }
                                 break;
                         }
-                        hab = hab + 1;
                         matriz[playerX, playerY] = jug1;
 
                     }
@@ -1094,7 +1269,7 @@ public class Laberinto
                     for (int c = 0; c < 3;)
                     {
                         t = 0;
-                        DescDeHab(desc, t);
+                        DescDeHab(desc, t, jug2);
                         Win();
                         ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                         tip = random.Next(0, 3);
@@ -1104,6 +1279,7 @@ public class Laberinto
                             case ConsoleKey.UpArrow:
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
+                                    hab = hab + 1;
                                     c = c + 1;
                                     playerXX = playerXX - 1;
                                     cantpaso2 = cantpaso2 - 1;
@@ -1116,11 +1292,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1133,7 +1309,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1142,7 +1318,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1152,6 +1328,7 @@ public class Laberinto
                             case ConsoleKey.DownArrow:
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
+                                    hab = hab + 1;
                                     c = c + 1;
                                     playerXX = playerXX + 1;
                                     cantpaso2 = cantpaso2 - 1;
@@ -1164,11 +1341,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1181,7 +1358,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1190,7 +1367,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1200,6 +1377,7 @@ public class Laberinto
                             case ConsoleKey.LeftArrow:
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
+                                    hab = hab + 1;
                                     c = c + 1;
                                     playerYY = playerYY - 1;
                                     cantpaso2 = cantpaso2 - 1;
@@ -1212,11 +1390,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1229,7 +1407,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1238,7 +1416,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1248,6 +1426,7 @@ public class Laberinto
                             case ConsoleKey.RightArrow:
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
+                                    hab = hab + 1;
                                     c = c + 1;
                                     playerYY = playerYY + 1;
                                     cantpaso2 = cantpaso2 - 1;
@@ -1260,11 +1439,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1277,7 +1456,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1286,7 +1465,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1327,7 +1506,6 @@ public class Laberinto
                                 break;
 
                         }
-                        hab = hab + 1;
                         matriz[playerXX, playerYY] = jug2;
 
                     }
@@ -1338,7 +1516,6 @@ public class Laberinto
                         if (enf2 == 2) enfriamiento2 = enfriamiento2 + 1;
                         if (jug2 == "C" && enf2 < 2) enf2 = enf2 + 1;
                         if (enfriamiento2 == 3) { habilidad2 = 1; enf2 = 0; }
-
                     }
                 }
                 else if (jug2 == "V" || jug2 == "S")
@@ -1346,7 +1523,7 @@ public class Laberinto
                     for (int c = 0; c < 4;)
                     {
                         t = 0;
-                        DescDeHab(desc, t);
+                        DescDeHab(desc, t, jug2);
                         Win();
                         ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                         tip = random.Next(0, 3);
@@ -1356,6 +1533,7 @@ public class Laberinto
                             case ConsoleKey.UpArrow:
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
+                                    hab = hab + 1;
                                     cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX - 1;
@@ -1368,11 +1546,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1385,7 +1563,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1394,7 +1572,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1404,6 +1582,7 @@ public class Laberinto
                             case ConsoleKey.DownArrow:
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
+                                    hab = hab + 1;
                                     cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerXX = playerXX + 1;
@@ -1416,11 +1595,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1433,7 +1612,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1442,7 +1621,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1452,6 +1631,7 @@ public class Laberinto
                             case ConsoleKey.LeftArrow:
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
+                                    hab = hab + 1;
                                     cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY - 1;
@@ -1464,11 +1644,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1481,7 +1661,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1490,7 +1670,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1500,9 +1680,11 @@ public class Laberinto
                             case ConsoleKey.RightArrow:
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
+                                    hab = hab + 1;
                                     cantpaso2 = cantpaso2 - 1;
                                     c = c + 1;
                                     playerYY = playerYY + 1;
+
                                 }
                                 if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
                                 if (matriz[playerXX, playerYY] == "X" && tramp)
@@ -1512,11 +1694,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1529,7 +1711,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1538,7 +1720,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1562,16 +1744,13 @@ public class Laberinto
                                 }
                                 break;
                         }
-                        hab = hab + 1;
                         matriz[playerXX, playerYY] = jug2;
-
                     }
                     if (habilidad2 == 0)
                     {
                         if (enf2 == 1) enfriamiento2 = enfriamiento2 + 1;
                         enf2 = 1;
                         if (enfriamiento2 == 3) { habilidad2 = 1; enf2 = 0; }
-
                     }
                 }
             }
@@ -1590,7 +1769,7 @@ public class Laberinto
                     for (int c = 0; c < 3;)
                     {
                         t = 0;
-                        DescDeHab(desc, t);
+                        DescDeHab(desc, t, jug2);
                         Win();
                         ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                         tip = random.Next(0, 3);
@@ -1612,11 +1791,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1629,7 +1808,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1638,7 +1817,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1660,11 +1839,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1677,7 +1856,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1686,7 +1865,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1708,11 +1887,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1725,7 +1904,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1734,7 +1913,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1756,11 +1935,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1773,7 +1952,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1782,7 +1961,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1798,7 +1977,7 @@ public class Laberinto
                     for (int c = 0; c < 4;)
                     {
                         t = 0;
-                        DescDeHab(desc, t);
+                        DescDeHab(desc, t, jug2);
                         Win();
                         ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                         tip = random.Next(0, 3);
@@ -1820,11 +1999,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1837,7 +2016,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1846,7 +2025,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1868,11 +2047,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1885,7 +2064,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1894,7 +2073,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1916,11 +2095,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1933,7 +2112,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1942,7 +2121,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1964,11 +2143,11 @@ public class Laberinto
                                         case 0:
                                             {
                                                 matriz[playerXX, playerYY] = " ";
-                                                playerXX = n - 2;
-                                                playerYY = n - 2;
+                                                playerXX = n - 3;
+                                                playerYY = n - 3;
                                                 t = 1;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1981,7 +2160,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -1990,7 +2169,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerXX, playerYY] = jug2;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug2);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2003,6 +2182,7 @@ public class Laberinto
                     }
                 }
                 control1 = !control1;
+                enf = 0;
                 hab = 1;
             }
             if (control2)
@@ -2013,7 +2193,7 @@ public class Laberinto
                     for (int c = 0; c < 3;)
                     {
                         t = 0;
-                        DescDeHab(desc, t);
+                        DescDeHab(desc, t, jug1);
                         Win();
                         ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                         matriz[playerX, playerY] = " ";
@@ -2041,7 +2221,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2055,7 +2235,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2065,7 +2245,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2091,7 +2271,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2104,7 +2284,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2113,7 +2293,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2140,7 +2320,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2153,7 +2333,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2162,7 +2342,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Win();
                                                 Console.ReadKey();
                                             }
@@ -2189,7 +2369,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2202,7 +2382,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2211,7 +2391,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2229,7 +2409,7 @@ public class Laberinto
                     for (int c = 0; c < 4;)
                     {
                         t = 0;
-                        DescDeHab(desc, t);
+                        DescDeHab(desc, t, jug1);
                         Win();
                         ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                         tip = random.Next(0, 3);
@@ -2255,7 +2435,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2267,7 +2447,7 @@ public class Laberinto
                                                     t = 2;
                                                 }
                                                 else t = 3;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2276,7 +2456,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2302,7 +2482,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2315,7 +2495,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2324,7 +2504,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2350,7 +2530,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2363,7 +2543,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2372,7 +2552,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2398,7 +2578,7 @@ public class Laberinto
                                                 playerY = 2;
                                                 t = 1;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2411,7 +2591,7 @@ public class Laberinto
                                                 }
                                                 else t = 3;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2420,7 +2600,7 @@ public class Laberinto
                                                 c = 10;
                                                 t = 4;
                                                 matriz[playerX, playerY] = jug1;
-                                                DescDeHab(desc, t);
+                                                DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
                                             break;
@@ -2433,6 +2613,7 @@ public class Laberinto
                     }
                 }
                 control2 = !control2;
+                enf2 = 0;
                 hab = 1;
             }
             if (jug1 == "I" || jug1 == "C" || jug1 == "J") cantpaso1 = 3;
@@ -2444,25 +2625,27 @@ public class Laberinto
     //para las diferentes trampas 
     public static void FuncTranpas(int t)
     {
+        Console.ForegroundColor = ConsoleColor.Red;
         if (t == 0)
         {
         }
         if (t == 1)
         {
-            Console.WriteLine("ESTA TRAMPA TE HA ENVIADO A LA CASILLA DE SALIDA(PRESIONE CUALQUIER TECLA PARA CONTINUAR)");
+            Console.WriteLine("ESTA TRAMPA TE HA ENVIADO A LA CASILLA DE SALIDA ( presione cualquier tecla para continuar )");
         }
         if (t == 2)
         {
-            Console.WriteLine("ESTA TRAMPA TE QUITA PUNTOS(PRESIONE CUALQUIER TECLA PARA CONTINUAR)");
+            Console.WriteLine("ESTA TRAMPA TE QUITA PUNTOS ( presione cualquier tecla para continuar )");
         }
         if (t == 3)
         {
-            Console.WriteLine("ESTA TRAMPA TE QUITA PUNTOS PERO USTED NO TIENE AUN(PRESIONE CUALQUIER TECLA PARA CONTINUAR)");
+            Console.WriteLine("ESTA TRAMPA TE QUITA PUNTOS PERO USTED NO TIENE AUN( presione cualquier tecla para continuar )");
         }
         if (t == 4)
         {
-            Console.WriteLine("ESTA TRAMPA YA NO DEJA QUE TE MUEVAS MAS (PRESIONE CUALQUIER TECLA PARA CONTINUAR)");
+            Console.WriteLine("ESTA TRAMPA YA NO DEJA QUE TE MUEVAS MAS ( presione cualquier tecla para continuar )");
         }
+        Console.ResetColor();
     }
     //esta clase distribuye los puntos aleatoriamente 
     public static void Points()
@@ -2486,7 +2669,7 @@ public class Laberinto
     //esta clase es para terminar el juego cuando recolecten x cantidad de puntos
     public static void Win()
     {
-        if (puntos1 == 5)
+        if (puntos1 == 6)
         {
             Console.Clear();
             Console.WriteLine(" Felicidades, a ganado el jugador 1");
@@ -2495,7 +2678,7 @@ public class Laberinto
             Environment.Exit(0);
 
         }
-        if (puntos2 == 5)
+        if (puntos2 == 6)
         {
             Console.Clear();
             Console.WriteLine(" Felicidades, a ganado el jugador 2");
