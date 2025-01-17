@@ -640,7 +640,6 @@ public class Laberinto
                         kk = 1;
                         break;
                     case ConsoleKey.Escape:
-                        kk = 1;
                         TamDelLab();
                         break;
                 }
@@ -749,7 +748,6 @@ public class Laberinto
                         }
                         break;
                     case ConsoleKey.Escape:
-                        kk = 1;
                         Jugadores();
                         break;
                 }
@@ -797,6 +795,7 @@ public class Laberinto
             {
                 Console.WriteLine(" ");
                 c = 1;
+
             }
             Console.Write(hist[t]);
         }
