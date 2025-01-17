@@ -22,6 +22,7 @@ C:\!mario\proyectos\juego beta\bin\Debug\net8.0\NAudio.Core.dll
 C:\!mario\proyectos\juego beta\bin\Debug\net8.0\NAudio.Midi.dll
 C:\!mario\proyectos\juego beta\bin\Debug\net8.0\NAudio.Wasapi.dll
 C:\!mario\proyectos\juego beta\bin\Debug\net8.0\NAudio.WinMM.dll
+<<<<<<< HEAD
 C:\!mario\proyectos\juego-master\bin\Debug\net8.0\juego beta.exe
 C:\!mario\proyectos\juego-master\bin\Debug\net8.0\juego beta.deps.json
 C:\!mario\proyectos\juego-master\bin\Debug\net8.0\juego beta.runtimeconfig.json
@@ -45,3 +46,6 @@ C:\!mario\proyectos\juego-master\obj\Debug\net8.0\refint\juego beta.dll
 C:\!mario\proyectos\juego-master\obj\Debug\net8.0\juego beta.pdb
 C:\!mario\proyectos\juego-master\obj\Debug\net8.0\juego beta.genruntimeconfig.cache
 C:\!mario\proyectos\juego-master\obj\Debug\net8.0\ref\juego beta.dll
+=======
+>>>>>>> 77e4c51eaa4f07e7f4c5854a6d8302aa5f850251
+C:\!mario\proyectos\juego-master\obj\Debug\net8.0\juego beta.sourcelink.json
