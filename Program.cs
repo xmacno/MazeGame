@@ -144,8 +144,8 @@ public class Laberinto
             AnsiConsole.MarkupLine("[blue]CONTROLES:[/]");
             AnsiConsole.MarkupLine("ARRIBA:                ↑");
             AnsiConsole.MarkupLine("ABAJO:                 ↓");
-            AnsiConsole.MarkupLine("IZQUIERDA:             ←");
-            AnsiConsole.MarkupLine("DERECHA:               →");
+            AnsiConsole.MarkupLine("IZQUIERDA:            <--");
+            AnsiConsole.MarkupLine("DERECHA:              -->");
             AnsiConsole.MarkupLine("HABILIDAD ESPECIAL:    X");
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);
             switch (keyInfo.Key)
@@ -155,8 +155,8 @@ public class Laberinto
                     AnsiConsole.MarkupLine("[blue]CONTROLES:[/]");
                     AnsiConsole.MarkupLine("ARRIBA:                ↑");
                     AnsiConsole.MarkupLine("ABAJO:                 [blue]↓[/]");
-                    AnsiConsole.MarkupLine("IZQUIERDA:             ←");
-                    AnsiConsole.MarkupLine("DERECHA:               →");
+                    AnsiConsole.MarkupLine("IZQUIERDA:            <--");
+                    AnsiConsole.MarkupLine("DERECHA:              -->");
                     AnsiConsole.MarkupLine("HABILIDAD ESPECIAL:    X");
                     Thread.Sleep(250);
                     break;
@@ -165,8 +165,8 @@ public class Laberinto
                     AnsiConsole.MarkupLine("[blue]CONTROLES:[/]");
                     AnsiConsole.MarkupLine("ARRIBA:                [blue]↑[/]");
                     AnsiConsole.MarkupLine("ABAJO:                 ↓");
-                    AnsiConsole.MarkupLine("IZQUIERDA:             ←");
-                    AnsiConsole.MarkupLine("DERECHA:               →");
+                    AnsiConsole.MarkupLine("IZQUIERDA:            <--");
+                    AnsiConsole.MarkupLine("DERECHA:              -->");
                     AnsiConsole.MarkupLine("HABILIDAD ESPECIAL:    X");
                     Thread.Sleep(250);
                     break;
@@ -175,8 +175,8 @@ public class Laberinto
                     AnsiConsole.MarkupLine("[blue]CONTROLES:[/]");
                     AnsiConsole.MarkupLine("ARRIBA:                ↑");
                     AnsiConsole.MarkupLine("ABAJO:                 ↓");
-                    AnsiConsole.MarkupLine("IZQUIERDA:             [blue]←[/]");
-                    AnsiConsole.MarkupLine("DERECHA:               →");
+                    AnsiConsole.MarkupLine("IZQUIERDA:           [blue]<--[/]");
+                    AnsiConsole.MarkupLine("DERECHA:              -->");
                     AnsiConsole.MarkupLine("HABILIDAD ESPECIAL:    X");
                     Thread.Sleep(250);
                     break;
@@ -185,8 +185,8 @@ public class Laberinto
                     AnsiConsole.MarkupLine("[blue]CONTROLES:[/]");
                     AnsiConsole.MarkupLine("ARRIBA:                ↑");
                     AnsiConsole.MarkupLine("ABAJO:                 ↓");
-                    AnsiConsole.MarkupLine("IZQUIERDA:             ←");
-                    AnsiConsole.MarkupLine("DERECHA:               [blue]→[/]");
+                    AnsiConsole.MarkupLine("IZQUIERDA:            <--");
+                    AnsiConsole.MarkupLine("DERECHA:             [blue]-->[/]");
                     AnsiConsole.MarkupLine("HABILIDAD ESPECIAL:    X");
                     Thread.Sleep(250);
                     break;
@@ -195,8 +195,8 @@ public class Laberinto
                     AnsiConsole.MarkupLine("[blue]CONTROLES:[/]");
                     AnsiConsole.MarkupLine("ARRIBA:                ↑");
                     AnsiConsole.MarkupLine("ABAJO:                 ↓");
-                    AnsiConsole.MarkupLine("IZQUIERDA:             ←");
-                    AnsiConsole.MarkupLine("DERECHA:               →");
+                    AnsiConsole.MarkupLine("IZQUIERDA:            <--");
+                    AnsiConsole.MarkupLine("DERECHA:              -->");
                     AnsiConsole.MarkupLine("HABILIDAD ESPECIAL:    [blue]X[/]");
                     Thread.Sleep(250);
                     break;
@@ -2829,7 +2829,7 @@ public class Laberinto
         Console.SetCursorPosition((Console.WindowWidth / 2) + 2, 12);
         Console.WriteLine(" EQUIPAMIENTO LISTO:");
         Console.SetCursorPosition((Console.WindowWidth / 2) + 2, 13);
-        Console.WriteLine("-SE A QUIPADO" + tip + " PROPURSORES DE TECNOLOGIA STARK ( presione alguna tecla )");
+        Console.WriteLine("-SE A QUIPADO " + tip + " PROPURSORES DE TECNOLOGIA STARK ( presione alguna tecla )");
         Console.ReadKey();
         return c - tip;
     }
