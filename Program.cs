@@ -12,8 +12,8 @@ using System.Media;
 using System.Runtime.InteropServices;
 public class Laberinto
 {
-    static int n = 1000;
-    static int m = 1000;
+    static int n = 50;
+    static int m = 50;
     static string[,] matriz = new string[n, m];
     static int puntos1 = 0;
     static int puntos2 = 0;
@@ -40,6 +40,8 @@ public class Laberinto
     }
     public static void Menu()
     {
+
+
         int k = 0;
         int kk = 0;
         int op = 1;
@@ -221,34 +223,34 @@ public class Laberinto
                 if (tam == 0)
                 {
                     Console.WriteLine("Elija una dimension (N x N) aproximada del mapa en el que desea jugar");
-                    AnsiConsole.MarkupLine("> [blue]12-20[/]");
+                    AnsiConsole.MarkupLine("> [blue]18-20[/]");
                     Console.WriteLine("  20-25");
                     Console.WriteLine("  25-30");
-                    Console.WriteLine("  30-40");
+                    Console.WriteLine("  30-35");
                 }
                 if (tam == 1)
                 {
                     Console.WriteLine("Elija una dimension (N x N) aproximada del mapa en el que desea jugar");
-                    Console.WriteLine("  12-20");
+                    Console.WriteLine("  18-20");
                     AnsiConsole.MarkupLine("> [blue]20-25[/]");
                     Console.WriteLine("  25-30");
-                    Console.WriteLine("  30-40");
+                    Console.WriteLine("  30-35");
                 }
                 if (tam == 2)
                 {
                     Console.WriteLine("Elija una dimension (N x N) aproximada del mapa en el que desea jugar");
-                    Console.WriteLine("  12-20");
+                    Console.WriteLine("  18-20");
                     Console.WriteLine("  20-25");
                     AnsiConsole.MarkupLine("> [blue]25-30[/]");
-                    Console.WriteLine("  30-40");
+                    Console.WriteLine("  30-35");
                 }
                 if (tam == 3)
                 {
                     Console.WriteLine("Elija una dimension (N x N) aproximada del mapa en el que desea jugar");
-                    Console.WriteLine("  12-20");
+                    Console.WriteLine("  18-20");
                     Console.WriteLine("  20-25");
                     Console.WriteLine("  25-30");
-                    AnsiConsole.MarkupLine("> [blue]30-40[/]");
+                    AnsiConsole.MarkupLine("> [blue]30-35[/]");
                 }
                 DescTamDelLab(tam);
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
@@ -272,7 +274,7 @@ public class Laberinto
 
             if (tam == 0)
             {
-                int ran = random.Next(12, 21);
+                int ran = random.Next(18, 21);
                 return ran;
             }
             else if (tam == 1)
@@ -287,7 +289,7 @@ public class Laberinto
             }
             else
             {
-                int ran = random.Next(30, 40);
+                int ran = random.Next(30, 36);
                 return ran;
             }
 
@@ -475,13 +477,12 @@ public class Laberinto
     //este metodo crea el laberinto
     public static void Camino()
     {
-
         Random random = new Random();
         Paso(1, 1);
         Paso(1, n - 2);
         Paso(n - 2, 1);
         Paso(m - 2, n - 2);
-
+        //crea islas habitables en toda la matriz
         for (int k = 1; k < n * 100;)
         {
             int ranx = random.Next(1, n - 1);
@@ -495,10 +496,10 @@ public class Laberinto
                 k = k + 1;
             }
         }
-
-        int caso = random.Next(0, 2);
+        //para abrir caminos
         for (int i = 2; i < n - 2; i++)
         {
+            int caso = random.Next(0, 2);
             for (int j = 2; j < m - 2; j++)
             {
                 if (matriz[i, j] == " ")
@@ -519,13 +520,9 @@ public class Laberinto
                     else if (matriz[i - 1, j] != " " && matriz[i, j - 1] != " ")
                     {
                         matriz[i - 1, j] = " ";
-
-
-
                     }
                     else if (matriz[i + 1, j] != " " && matriz[i, j - 1] != " ")
                     {
-
                         matriz[i + 1, j] = " ";
 
                     }
@@ -540,11 +537,44 @@ public class Laberinto
             }
 
         }
+        //para que no se cierren en los marcos
+        for (int i = 1; i < n - 2; i++)
+        {
+            if (matriz[i, 1] == "0" && matriz[i - 1, 2] == "0") matriz[i - 1, 2] = " ";
+        }
+        for (int i = n - 2; i < n - 2; i++)
+        {
+            if (matriz[i, n - 2] == "0" && matriz[i - 1, n - 3] == "0") matriz[i - 1, n - 3] = " ";
+        }
+        for (int i = 1; i < n - 2; i++)
+        {
+            if (matriz[1, i] == "0" && matriz[2, i + 1] == "0") matriz[2, i + 1] = " ";
+        }
+        for (int i = 1; i < n - 2; i++)
+        {
+            if (matriz[n - 2, i] == "0" && matriz[n - 3, i + 1] == "0") matriz[n - 3, i + 1] = " ";
+        }
         matriz[2, 3] = " ";
         matriz[n - 3, 3] = " ";
         matriz[n - 2, 3] = " ";
         matriz[3, n - 2] = " ";
         matriz[n - 3, n - 2] = " ";
+        //para que no quede tan vacio
+        for (int i = 2; i < n - 2; i++)
+        {
+            for (int j = 2; j < m - 2; j++)
+            {
+                if (matriz[i, j] == " " && matriz[i + 1, j] == " " && matriz[i - 1, j] == " " && matriz[i, j + 1] == " " && matriz[i, j - 1] == " ")
+                {
+                    if (matriz[i + 1, j + 1] == " " && matriz[i + 1, j - 1] == " " && matriz[i - 1, j + 1] == " " && matriz[i - 1, j - 1] == " ") matriz[i, j] = "0";
+                    if (matriz[i + 1, j + 1] == "0" && matriz[i + 1, j - 1] == " " && matriz[i - 1, j + 1] == " " && matriz[i - 1, j - 1] == " ") matriz[i, j] = "0";
+                    if (matriz[i + 1, j + 1] == " " && matriz[i + 1, j - 1] == " " && matriz[i - 1, j + 1] == " " && matriz[i - 1, j - 1] == "0") matriz[i, j] = "0";
+
+
+                }
+
+            }
+        }
     }
     //distribulle las trampas 
     public static void Tranpas()
@@ -638,9 +668,6 @@ public class Laberinto
                         break;
                     case ConsoleKey.Enter:
                         kk = 1;
-                        break;
-                    case ConsoleKey.Escape:
-                        TamDelLab();
                         break;
                 }
             }
@@ -749,7 +776,7 @@ public class Laberinto
                         break;
                     case ConsoleKey.Escape:
                         Jugadores();
-                        break;
+                        return;
                 }
             }
             if (opcion2 == 0 && opcion != opcion2)
@@ -787,10 +814,10 @@ public class Laberinto
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.Blue;
         int c = 0;
-        string hist = "LAS GEMAS DEL INFINITO SON SEIS: MENTE, ALMA, ESPACIO, PODER, TIEMPO Y REALIDAD.EN ESTE MULTIVERSO EN EL QUE SE ENCUNTRAN SE HA ALTERADO LA REALIDAD POR LO QUE AHORA EXISTEN MAS DE SEIS GEMAS. SU OBJETIVO ES AGARRAR SEIS DE ESTAS GEMAS PARA PODER VOLVER A TU REALIDAD. SUERTE";
+        string hist = "LAS GEMAS DEL INFINITO SON SEIS: MENTE, ALMA, ESPACIO, PODER, TIEMPO Y REALIDAD.EN ESTE MULTIVERSO EN EL QUE SE ENCUNTRAN SE HA ALERADO LA REALIDAD POR LO QUE AHORA EXISTEN MAS DE SEIS GEMAS. SU OBJETIVO ES AGARRAR SEIS DE ESTAS GEMAS PARA PODER VOLVER A TU REALIDAD. SUERTE";
         for (int t = 0; t < hist.Length; t++)
         {
-            Thread.Sleep(20);
+            Thread.Sleep(5);
             if (t >= Console.WindowWidth - 12 && hist[t] == ' ' && c == 0)
             {
                 Console.WriteLine(" ");
@@ -804,6 +831,54 @@ public class Laberinto
         Console.ResetColor();
         Console.WriteLine("presione una tecla para comenzar");
         Console.ReadKey();
+        Tutorial();
+    }
+    //tutorial
+    public static void Tutorial()
+    {
+        int k = 0;
+        while (k == 0)
+        {
+            Console.Clear();
+            Console.WriteLine("QUIERES UN PEQUEÑO TUTORIAL SOBRE EL JUEGO?");
+            Console.WriteLine("SI (pulse A)                                NO (pulse S)");
+            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+            switch (keyInfo.Key)
+            {
+                case ConsoleKey.A:
+                    Console.Clear();
+                    AnsiConsole.MarkupLine("[blue]                                TUTORIAL:[/]");
+                    AnsiConsole.MarkupLine("[blue]-OBJETIVO:[/] ESTE ES UN JUEGO DONDE DOS JUGADORES ESTAN EN UN LABERINTO, GANA EL QUE PRIMERO CONSIGA REUNIR LAS SEIS GEMAS.");
+                    Console.WriteLine("");
+                    AnsiConsole.MarkupLine("[blue]-TABLA SUPERIOR:[/] EN ESTA SE MARCA DE AZUL EL JUGADOR AL CUAL LE CORRESPONDA EL TURNO AL IGUAL QUE SU CARACTER EN EL MAPA. EN ESTA TABLA SALEN LOS PUNTOS(GEMAS), HABILIDADES QUE PODEMOS USAR, LA CANTIDAD DE TURNOS QUE SE DEBE ESPERAR PARA RECARGAR LA HABILIDAD Y LA CANTIDAD DE PASOS POR DAR DEL JUGADOR");
+                    Console.WriteLine("");
+                    Console.WriteLine("╔═══════════════╦═════════════════╦═════════════════╦═════════════════╦════════════════════╗");
+                    Console.WriteLine("║   JUGADORES   ║     PUNTOS      ║    CANTIDAD     ║    HABILIDAD    ║   RESTAURACION     ║");
+                    Console.WriteLine("║               ║                 ║    DE PASOS     ║                 ║ DE LA HABILIDAD    ║");
+                    Console.WriteLine("╠═══════════════╬═════════════════╬═════════════════╬═════════════════╬════════════════════╣");
+                    Console.BackgroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("║   JUGADOR 1   ║         0       ║      0          ║        0        ║      1/3           ║");
+                    Console.ResetColor();
+                    Console.WriteLine("╚═══════════════╩═════════════════╩═════════════════╩═════════════════╩════════════════════╝");
+                    Console.WriteLine("");
+                    AnsiConsole.MarkupLine("[blue]-USO DE HABILIDAD:[/] ESTA SE PUEDE USAR PULSANDO X Y SOLO SE PUEDE USAR EN LA PRIMERA ACCION DEL TURNO ");
+                    Console.WriteLine("");
+                    AnsiConsole.MarkupLine("[blue]-LEYENDA:[/] ");
+                    AnsiConsole.MarkupLine("[red] X [/] - TRAMPAS  ");
+                    AnsiConsole.MarkupLine("[yellow] § [/] - CASILLA DE BENEFICIOS  ");
+                    AnsiConsole.MarkupLine(" 0 - PAREDES  ");
+                    AnsiConsole.MarkupLine("[green] * [/] - GEMAS  ");
+                    Console.WriteLine("");
+                    Console.WriteLine("( presione cualquier tecla para continuar )");
+                    Console.ReadKey();
+                    k = 1;
+                    break;
+                case ConsoleKey.S:
+                    k = 1;
+                    break;
+
+            }
+        }
     }
     //este metodo es para mostrar lo que hace cada jugador
     public static void DescJugadores(int c)
@@ -1103,7 +1178,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.Escape:
-                                Menu(); break;
+                                Exit(); break;
                             case ConsoleKey.X:
                                 if (hab == 0 && habilidad1 > 0 && jug1 == "I")
                                 {
@@ -1173,7 +1248,7 @@ public class Laberinto
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
-                                if (matriz[playerX, playerY] == "X")
+                                if (matriz[playerX, playerY] == "X" && tramp)
                                 {
                                     switch (tip)
                                     {
@@ -1222,7 +1297,7 @@ public class Laberinto
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
-                                if (matriz[playerX, playerY] == "X")
+                                if (matriz[playerX, playerY] == "X" && tramp)
                                 {
                                     switch (tip)
                                     {
@@ -1272,7 +1347,7 @@ public class Laberinto
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
-                                if (matriz[playerX, playerY] == "X")
+                                if (matriz[playerX, playerY] == "X" && tramp)
                                 {
                                     switch (tip)
                                     {
@@ -1322,7 +1397,7 @@ public class Laberinto
                                 }
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
-                                if (matriz[playerX, playerY] == "X")
+                                if (matriz[playerX, playerY] == "X" && tramp)
                                 {
                                     switch (tip)
                                     {
@@ -1364,7 +1439,7 @@ public class Laberinto
 
                                 break;
                             case ConsoleKey.Escape:
-                                Menu(); break;
+                                Exit(); break;
                             case ConsoleKey.X:
                                 if (hab == 0 && habilidad1 > 0 && jug1 == "V")
                                 {
@@ -1609,7 +1684,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.Escape:
-                                Menu(); break;
+                                Exit(); break;
                             case ConsoleKey.X:
                                 if (hab == 0 && habilidad2 > 0 && jug2 == "I")
                                 {
@@ -1870,7 +1945,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.Escape:
-                                Menu(); break;
+                                Exit(); break;
                             case ConsoleKey.X:
                                 if (hab == 0 && habilidad2 > 0 && jug2 == "V")
                                 {
@@ -2117,7 +2192,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.Escape:
-                                Menu(); break;
+                                Exit(); break;
                         }
                         matriz[playerXX, playerYY] = jug2;
                     }
@@ -2331,7 +2406,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.Escape:
-                                Menu(); break;
+                                Exit(); break;
                         }
                         matriz[playerXX, playerYY] = jug2;
 
@@ -2559,7 +2634,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.Escape:
-                                Menu(); break;
+                                Exit(); break;
                         }
                         matriz[playerX, playerY] = jug1;
                     }
@@ -2773,7 +2848,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.Escape:
-                                Menu(); break;
+                                Exit(); break;
                         }
                         matriz[playerX, playerY] = jug1;
                     }
@@ -2799,6 +2874,7 @@ public class Laberinto
         }
         else { cantpaso2 = cantpaso2 + tip; }
         DescDeHab(0, 0, jug);
+        Console.ForegroundColor = ConsoleColor.Yellow;
         Console.SetCursorPosition((Console.WindowWidth / 2) + 2, 12);
         Console.WriteLine(" EQUIPANDO:");
         Console.SetCursorPosition((Console.WindowWidth / 2) + 2, 13);
@@ -2829,6 +2905,7 @@ public class Laberinto
         Console.WriteLine(" EQUIPAMIENTO LISTO:");
         Console.SetCursorPosition((Console.WindowWidth / 2) + 2, 13);
         Console.WriteLine("-SE A QUIPADO " + tip + " PROPURSORES DE TECNOLOGIA STARK ( presione alguna tecla )");
+        Console.ResetColor();
         Console.ReadKey();
         return c - tip;
     }
@@ -2880,7 +2957,7 @@ public class Laberinto
     public static void Benef()
     {
         Random random = new Random();
-        for (int k = 0; k < (n * 2) - 7;)
+        for (int k = 0; k < n;)
         {
             int ranx = random.Next(1, n - 1);
             int rany = random.Next(1, m - 1);
@@ -2901,7 +2978,8 @@ public class Laberinto
         if (puntos1 == 6)
         {
             Console.Clear();
-            Console.WriteLine(" Felicidades, a ganado el jugador 1");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(" FELIZIDADES EL JUGADOR UNO CONSEGUIDO LAS SEIS GEMAS ;)");
             Console.ReadKey();
             Console.Clear();
             Environment.Exit(0);
@@ -2910,14 +2988,23 @@ public class Laberinto
         if (puntos2 == 6)
         {
             Console.Clear();
-            Console.WriteLine(" Felicidades, a ganado el jugador 2");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(" FELIZIDADES EL JUGADOR DOS CONSEGUIDO LAS SEIS GEMAS ;)");
             Console.ReadKey();
             Console.Clear();
             Environment.Exit(0);
 
         }
     }
-
+    //cartel al salir 
+    public static void Exit()
+    {
+        Console.Clear();
+        Console.WriteLine(" USTED HA SALIDO EL JUEGO ");
+        Console.ReadKey();
+        Console.Clear();
+        Environment.Exit(0);
+    }
 }
 
 
