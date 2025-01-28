@@ -401,27 +401,27 @@ public class Laberinto
         }
         else if (habdesc == 1)
         {
-            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A IRON MAN UTILIZAR SU TRAJE PARA IMPULSARCE Y CAMINAR 3 CASILLAS EXTRAS");
+            Console.WriteLine("LA HABILIDAD ESCOGIDA PERMITE A IRON MAN UTILIZAR SU TRAJE PARA IMPULSARCE Y CAMINAR 3 CASILLAS EXTRAS");
         }
         else if (habdesc == 2)
         {
-            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE AL CAPITAN AMERICA ATURDIR AL ALVERSARIO CON SU ESCUDO Y SALTAR UN TURNO");
+            Console.WriteLine("LA HABILIDAD ESCOGIDA PERMITE AL CAPITAN AMERICA ATURDIR AL ALVERSARIO CON SU ESCUDO Y SALTAR UN TURNO");
         }
         else if (habdesc == 3)
         {
-            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A VENOM USAR UN SIMBIONTE PARA CONTROLAR A TU OPONENTE POR UN TURNO");
+            Console.WriteLine("LA HABILIDAD ESCOGIDA PERMITE A VENOM USAR UN SIMBIONTE PARA CONTROLAR A TU OPONENTE POR UN TURNO");
         }
         else if (habdesc == 4)
         {
-            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A SPIDERMAN COLUMPIARSE SOBRE LAS TRAMPAS ( INMUNE A LAS TRAMPAS)");
+            Console.WriteLine("LA HABILIDAD ESCOGIDA PERMITE A SPIDERMAN COLUMPIARSE SOBRE LAS TRAMPAS ( INMUNE A LAS TRAMPAS)");
         }
         else if (habdesc == 5)
         {
-            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A JEAN GRAY USAR SU TELEQUINESIS PARA TOMAR UNA DE LAS GEMAS DE TU OPONENTE ");
+            Console.WriteLine("LA HABILIDAD ESCOGIDA PERMITE A JEAN GRAY USAR SU TELEQUINESIS PARA TOMAR UNA DE LAS GEMAS DE TU OPONENTE ");
         }
         else if (habdesc == 6)
         {
-            Console.WriteLine("LA HABILIDAD ESCOGINA PERMITE A JEAN GRAY USAR SU TELEQUINESIS PARA TOMAR UNA DE LAS GEMAS DE TU OPONENTE ( su oponente no tiene gemas ) ");
+            Console.WriteLine("LA HABILIDAD ESCOGIDA PERMITE A JEAN GRAY USAR SU TELEQUINESIS PARA TOMAR UNA DE LAS GEMAS DE TU OPONENTE ( su oponente no tiene gemas ) ");
         }
         Console.ResetColor();
         FuncTranpas(t);
@@ -569,10 +569,7 @@ public class Laberinto
                     if (matriz[i + 1, j + 1] == " " && matriz[i + 1, j - 1] == " " && matriz[i - 1, j + 1] == " " && matriz[i - 1, j - 1] == " ") matriz[i, j] = "0";
                     if (matriz[i + 1, j + 1] == "0" && matriz[i + 1, j - 1] == " " && matriz[i - 1, j + 1] == " " && matriz[i - 1, j - 1] == " ") matriz[i, j] = "0";
                     if (matriz[i + 1, j + 1] == " " && matriz[i + 1, j - 1] == " " && matriz[i - 1, j + 1] == " " && matriz[i - 1, j - 1] == "0") matriz[i, j] = "0";
-
-
                 }
-
             }
         }
     }
@@ -829,7 +826,7 @@ public class Laberinto
         Console.WriteLine(" ");
         Console.WriteLine(" ");
         Console.ResetColor();
-        Console.WriteLine("presione una tecla para comenzar");
+        Console.WriteLine("( presione una tecla para comenzar )");
         Console.ReadKey();
         Tutorial();
     }
@@ -841,6 +838,7 @@ public class Laberinto
         {
             Console.Clear();
             Console.WriteLine("QUIERES UN PEQUEÑO TUTORIAL SOBRE EL JUEGO?");
+            Console.WriteLine(" ");
             Console.WriteLine("SI (pulse A)                                NO (pulse S)");
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);
             switch (keyInfo.Key)
@@ -973,6 +971,7 @@ public class Laberinto
                         switch (keyInfo.Key)
                         {
                             case ConsoleKey.UpArrow:
+                                if (matriz[playerX - 1, playerY] == jug2) break;
                                 if (matriz[playerX - 1, playerY] != "0")
                                 {
                                     hab = hab + 1;
@@ -980,7 +979,6 @@ public class Laberinto
                                     c = c + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X")
@@ -1027,6 +1025,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.DownArrow:
+                                if (matriz[playerX + 1, playerY] == jug2) break;
                                 if (matriz[playerX + 1, playerY] != "0")
                                 {
                                     hab = hab + 1;
@@ -1077,6 +1076,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.LeftArrow:
+                                if (matriz[playerX, playerY - 1] == jug2) break;
                                 if (matriz[playerX, playerY - 1] != "0")
                                 {
                                     hab = hab + 1;
@@ -1128,6 +1128,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.RightArrow:
+                                if (matriz[playerX, playerY + 1] == jug2) break;
                                 if (matriz[playerX, playerY + 1] != "0")
                                 {
                                     hab = hab + 1;
@@ -1239,6 +1240,7 @@ public class Laberinto
                         switch (keyInfo.Key)
                         {
                             case ConsoleKey.UpArrow:
+                                if (matriz[playerX - 1, playerY] == jug2) break;
                                 if (matriz[playerX - 1, playerY] != "0")
                                 {
                                     hab = hab + 1;
@@ -1271,6 +1273,7 @@ public class Laberinto
                                                     t = 2;
                                                 }
                                                 else t = 3;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
@@ -1288,6 +1291,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.DownArrow:
+                                if (matriz[playerX + 1, playerY] == jug2) break;
                                 if (matriz[playerX + 1, playerY] != "0")
                                 {
                                     hab = hab + 1;
@@ -1338,6 +1342,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.LeftArrow:
+                                if (matriz[playerX, playerY - 1] == jug2) break;
                                 if (matriz[playerX, playerY - 1] != "0")
                                 {
                                     hab = hab + 1;
@@ -1388,6 +1393,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.RightArrow:
+                                if (matriz[playerX, playerY + 1] == jug2) break;
                                 if (matriz[playerX, playerY + 1] != "0")
                                 {
                                     hab = hab + 1;
@@ -1452,6 +1458,7 @@ public class Laberinto
                                 if (hab == 0 && habilidad1 > 0 && jug1 == "S")
                                 {
                                     tramp = false;
+                                    habilidad1 = habilidad1 - 1;
                                     hab = hab + 1;
                                     desc = 4;
                                 }
@@ -1484,6 +1491,7 @@ public class Laberinto
                         switch (keyInfo.Key)
                         {
                             case ConsoleKey.UpArrow:
+                                if (matriz[playerXX - 1, playerYY] == jug1) break;
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
                                     hab = hab + 1;
@@ -1534,6 +1542,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.DownArrow:
+                                if (matriz[playerXX + 1, playerYY] == jug1) break;
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
                                     hab = hab + 1;
@@ -1584,6 +1593,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.LeftArrow:
+                                if (matriz[playerXX, playerYY - 1] == jug1) break;
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
                                     hab = hab + 1;
@@ -1634,6 +1644,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.RightArrow:
+                                if (matriz[playerXX, playerYY + 1] == jug1) break;
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
                                     hab = hab + 1;
@@ -1744,6 +1755,7 @@ public class Laberinto
                         switch (keyInfo.Key)
                         {
                             case ConsoleKey.UpArrow:
+                                if (matriz[playerXX - 1, playerYY] == jug1) break;
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
                                     hab = hab + 1;
@@ -1794,6 +1806,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.DownArrow:
+                                if (matriz[playerXX + 1, playerYY] == jug1) break;
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
                                     hab = hab + 1;
@@ -1844,6 +1857,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.LeftArrow:
+                                if (matriz[playerXX, playerYY - 1] == jug1) break;
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
                                     hab = hab + 1;
@@ -1894,6 +1908,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.RightArrow:
+                                if (matriz[playerXX, playerYY + 1] == jug1) break;
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
                                     hab = hab + 1;
@@ -1955,9 +1970,10 @@ public class Laberinto
                                     desc = 3;
                                     hab = hab + 1;
                                 }
-                                if (hab == 0 && habilidad1 > 0 && jug2 == "S")
+                                if (hab == 0 && habilidad2 > 0 && jug2 == "S")
                                 {
                                     tramp = false;
+                                    habilidad2 = habilidad2 - 1;
                                     hab = hab + 1;
                                     desc = 4;
                                 }
@@ -1996,6 +2012,7 @@ public class Laberinto
                         switch (keyInfo.Key)
                         {
                             case ConsoleKey.UpArrow:
+                                if (matriz[playerXX - 1, playerYY] == jug1) break;
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
                                     c = c + 1;
@@ -2045,6 +2062,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.DownArrow:
+                                if (matriz[playerXX + 1, playerYY] == jug1) break;
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
                                     c = c + 1;
@@ -2094,6 +2112,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.LeftArrow:
+                                if (matriz[playerXX, playerYY - 1] == jug1) break;
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
                                     c = c + 1;
@@ -2143,6 +2162,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.RightArrow:
+                                if (matriz[playerXX, playerYY + 1] == jug1) break;
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
                                     c = c + 1;
@@ -2210,6 +2230,7 @@ public class Laberinto
                         switch (keyInfo.Key)
                         {
                             case ConsoleKey.UpArrow:
+                                if (matriz[playerXX - 1, playerYY] == jug1) break;
                                 if (matriz[playerXX - 1, playerYY] != "0")
                                 {
                                     cantpaso2 = cantpaso2 - 1;
@@ -2259,6 +2280,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.DownArrow:
+                                if (matriz[playerXX + 1, playerYY] == jug1) break;
                                 if (matriz[playerXX + 1, playerYY] != "0")
                                 {
                                     cantpaso2 = cantpaso2 - 1;
@@ -2308,6 +2330,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.LeftArrow:
+                                if (matriz[playerXX, playerYY - 1] == jug1) break;
                                 if (matriz[playerXX, playerYY - 1] != "0")
                                 {
                                     cantpaso2 = cantpaso2 - 1;
@@ -2357,6 +2380,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.RightArrow:
+                                if (matriz[playerXX, playerYY + 1] == jug1) break;
                                 if (matriz[playerXX, playerYY + 1] != "0")
                                 {
                                     cantpaso2 = cantpaso2 - 1;
@@ -2432,13 +2456,13 @@ public class Laberinto
                         switch (keyInfo.Key)
                         {
                             case ConsoleKey.UpArrow:
+                                if (matriz[playerX - 1, playerY] == jug2) break;
                                 if (matriz[playerX - 1, playerY] != "0")
                                 {
                                     playerX = playerX - 1;
                                     c = c + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-
                                 if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X")
@@ -2485,6 +2509,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.DownArrow:
+                                if (matriz[playerX + 1, playerY] == jug2) break;
                                 if (matriz[playerX + 1, playerY] != "0")
                                 {
                                     c = c + 1;
@@ -2534,6 +2559,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.LeftArrow:
+                                if (matriz[playerX, playerY - 1] == jug2) break;
                                 if (matriz[playerX, playerY - 1] != "0")
                                 {
                                     playerY = playerY - 1;
@@ -2585,6 +2611,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.RightArrow:
+                                if (matriz[playerX, playerY + 1] == jug2) break;
                                 if (matriz[playerX, playerY + 1] != "0")
                                 {
                                     c = c + 1;
@@ -2653,6 +2680,7 @@ public class Laberinto
                         switch (keyInfo.Key)
                         {
                             case ConsoleKey.UpArrow:
+                                if (matriz[playerX - 1, playerY] == jug2) break;
                                 if (matriz[playerX - 1, playerY] != "0")
                                 {
                                     playerX = playerX - 1;
@@ -2684,6 +2712,7 @@ public class Laberinto
                                                     t = 2;
                                                 }
                                                 else t = 3;
+                                                matriz[playerX, playerY] = jug1;
                                                 DescDeHab(desc, t, jug1);
                                                 Console.ReadKey();
                                             }
@@ -2701,6 +2730,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.DownArrow:
+                                if (matriz[playerX + 1, playerY] == jug2) break;
                                 if (matriz[playerX + 1, playerY] != "0")
                                 {
                                     c = c + 1;
@@ -2750,6 +2780,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.LeftArrow:
+                                if (matriz[playerX, playerY - 1] == jug2) break;
                                 if (matriz[playerX, playerY - 1] != "0")
                                 {
                                     playerY = playerY - 1;
@@ -2799,6 +2830,7 @@ public class Laberinto
                                 }
                                 break;
                             case ConsoleKey.RightArrow:
+                                if (matriz[playerX, playerY + 1] == jug2) break;
                                 if (matriz[playerX, playerY + 1] != "0")
                                 {
                                     c = c + 1;
@@ -2867,7 +2899,7 @@ public class Laberinto
     public static int CasillaBen(int c, string jug)
     {
         Random random = new Random();
-        int tip = random.Next(1, 3);
+        int tip = random.Next(1, 5);
         if (turnos)
         {
             cantpaso1 = cantpaso1 + tip;
@@ -2875,35 +2907,35 @@ public class Laberinto
         else { cantpaso2 = cantpaso2 + tip; }
         DescDeHab(0, 0, jug);
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.SetCursorPosition((Console.WindowWidth / 2) + 2, 12);
+        Console.SetCursorPosition((Console.WindowWidth / 2), 12);
         Console.WriteLine(" EQUIPANDO:");
-        Console.SetCursorPosition((Console.WindowWidth / 2) + 2, 13);
+        Console.SetCursorPosition((Console.WindowWidth / 2), 13);
         Console.WriteLine("   █░░░░░:");
         Thread.Sleep(250);
         DescDeHab(0, 0, jug);
-        Console.SetCursorPosition((Console.WindowWidth / 2) + 2, 12);
+        Console.SetCursorPosition((Console.WindowWidth / 2), 12);
         Console.WriteLine(" EQUIPANDO:");
-        Console.SetCursorPosition((Console.WindowWidth / 2) + 2, 13);
+        Console.SetCursorPosition((Console.WindowWidth / 2), 13);
         Console.WriteLine("   ███░░░:");
         Thread.Sleep(250);
         DescDeHab(0, 0, jug);
-        Console.SetCursorPosition((Console.WindowWidth / 2) + 2, 12);
+        Console.SetCursorPosition((Console.WindowWidth / 2), 12);
         Console.WriteLine(" EQUIPANDO:");
-        Console.SetCursorPosition((Console.WindowWidth / 2) + 2, 13);
+        Console.SetCursorPosition((Console.WindowWidth / 2), 13);
         Console.WriteLine("   ████░░:");
         Thread.Sleep(250);
         DescDeHab(0, 0, jug);
-        Console.SetCursorPosition((Console.WindowWidth / 2) + 2, 12);
+        Console.SetCursorPosition((Console.WindowWidth / 2), 12);
         Console.WriteLine(" EQUIPANDO:");
-        Console.SetCursorPosition((Console.WindowWidth / 2) + 2, 13);
+        Console.SetCursorPosition((Console.WindowWidth / 2), 13);
         Console.WriteLine("   ██████:");
         Thread.Sleep(250);
         Console.Clear();
         Thread.Sleep(250);
         DescDeHab(0, 0, jug);
-        Console.SetCursorPosition((Console.WindowWidth / 2) + 2, 12);
+        Console.SetCursorPosition((Console.WindowWidth / 2), 12);
         Console.WriteLine(" EQUIPAMIENTO LISTO:");
-        Console.SetCursorPosition((Console.WindowWidth / 2) + 2, 13);
+        Console.SetCursorPosition((Console.WindowWidth / 2), 13);
         Console.WriteLine("-SE A QUIPADO " + tip + " PROPURSORES DE TECNOLOGIA STARK ( presione alguna tecla )");
         Console.ResetColor();
         Console.ReadKey();
@@ -2938,7 +2970,7 @@ public class Laberinto
     public static void Points()
     {
         Random random = new Random();
-        for (int k = 0; k < 15;)
+        for (int k = 0; k < n + 3;)
         {
             int ranx = random.Next(1, n - 1);
             int rany = random.Next(1, m - 1);
@@ -2946,7 +2978,6 @@ public class Laberinto
             int y = rany;
             if (matriz[x, y] == " ")
             {
-
                 matriz[x, y] = "*";
                 k = k + 1;
             }
