@@ -10,34 +10,22 @@ using System.Xml;
 using Spectre.Console;
 using System.Media;
 using System.Runtime.InteropServices;
+using NAudio.Wave;
 public class Laberinto
 {
-    static int n = 50;
-    static int m = 50;
-    static string[,] matriz = new string[n, m];
-    static int puntos1 = 0;
-    static int puntos2 = 0;
-    static int habilidad1 = 1;
-    static int habilidad2 = 1;
-    static bool turnos = true;
-    static int enfriamiento1 = 0;
-    static int enfriamiento2 = 0;
-    static int cantpaso1 = 0;
-    static int cantpaso2 = 0;
-    static void Main()
-    {
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = 0; j < m; j++)
-            {
-                matriz[i, j] = "0";
-            }
-        }
-        Console.Title = "EN BUSACA DE LAS GEMAS";
-        Menu();
+    public static int n = 50;
+    public static int m = 50;
+    public static string[,] matriz = new string[n, m];
+    public static int puntos1 = 0;
+    public static int puntos2 = 0;
+    public static int habilidad1 = 1;
+    public static int habilidad2 = 1;
+    public static bool turnos = true;
+    public static int enfriamiento1 = 0;
+    public static int enfriamiento2 = 0;
+    public static int cantpaso1 = 0;
+    public static int cantpaso2 = 0;
 
-
-    }
     public static void Menu()
     {
 
@@ -107,16 +95,16 @@ public class Laberinto
                         if (op < 3) op = op + 1;
                         break;
                     case ConsoleKey.UpArrow:
-                        if (op > 0) op = op - 1;
+                        if (op > 1) op = op - 1;
                         break;
                     case ConsoleKey.Enter:
+                        Musc.Sonidos(1);
                         if (op != 2) kk = 1;
                         if (op == 2)
                         { Controles(); }
                         break;
                 }
             }
-
             if (op == 1)
             {
                 n = TamDelLab();
@@ -131,6 +119,7 @@ public class Laberinto
             }
             else if (op == 3)
             {
+                Musc.Sonidos(1);
                 Console.Clear();
                 Environment.Exit(0);
                 break;
@@ -263,6 +252,7 @@ public class Laberinto
                         if (tam != 0) tam = tam - 1;
                         break;
                     case ConsoleKey.Enter:
+                        Musc.Sonidos(1);
                         kk = 1;
                         break;
                     case ConsoleKey.Escape:
@@ -664,6 +654,7 @@ public class Laberinto
                         if (opcion != 0) opcion = opcion - 1;
                         break;
                     case ConsoleKey.Enter:
+                        Musc.Sonidos(1);
                         kk = 1;
                         break;
                 }
@@ -761,6 +752,7 @@ public class Laberinto
                         if (opcion2 != 0) opcion2 = opcion2 - 1;
                         break;
                     case ConsoleKey.Enter:
+                        Musc.Sonidos(1);
                         if (opcion != opcion2) kk = 1;
                         else
                         {
@@ -828,6 +820,7 @@ public class Laberinto
         Console.ResetColor();
         Console.WriteLine("( presione una tecla para comenzar )");
         Console.ReadKey();
+        Musc.Sonidos(1);
         Tutorial();
     }
     //tutorial
@@ -844,6 +837,7 @@ public class Laberinto
             switch (keyInfo.Key)
             {
                 case ConsoleKey.A:
+                    Musc.Sonidos(1);
                     Console.Clear();
                     AnsiConsole.MarkupLine("[blue]                                TUTORIAL:[/]");
                     AnsiConsole.MarkupLine("[blue]-OBJETIVO:[/] ESTE ES UN JUEGO DONDE DOS JUGADORES ESTAN EN UN LABERINTO, GANA EL QUE PRIMERO CONSIGA REUNIR LAS SEIS GEMAS.");
@@ -870,8 +864,10 @@ public class Laberinto
                     Console.WriteLine("( presione cualquier tecla para continuar )");
                     Console.ReadKey();
                     k = 1;
+                    Musc.Sonidos(1);
                     break;
                 case ConsoleKey.S:
+                    Musc.Sonidos(1);
                     k = 1;
                     break;
 
@@ -979,7 +975,7 @@ public class Laberinto
                                     c = c + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { { puntos1 = puntos1 + 1; Musc.Sonidos(2); } }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X")
                                 {
@@ -1033,7 +1029,7 @@ public class Laberinto
                                     playerX = playerX + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { puntos1 = puntos1 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X")
                                 {
@@ -1084,7 +1080,7 @@ public class Laberinto
                                     cantpaso1 = cantpaso1 - 1;
                                     c = c + 1;
                                 }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { puntos1 = puntos1 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X")
                                 {
@@ -1136,7 +1132,7 @@ public class Laberinto
                                     playerY = playerY + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { puntos1 = puntos1 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X")
                                 {
@@ -1183,6 +1179,7 @@ public class Laberinto
                             case ConsoleKey.X:
                                 if (hab == 0 && habilidad1 > 0 && jug1 == "I")
                                 {
+                                    Musc.Sonidos(3);
                                     cantpaso1 = cantpaso1 + 3;
                                     c = c - 3;
                                     habilidad1 = habilidad1 - 1;
@@ -1191,6 +1188,7 @@ public class Laberinto
                                 }
                                 if (hab == 0 && habilidad1 > 0 && jug1 == "C")
                                 {
+                                    Musc.Sonidos(3);
                                     saltarturno = 1;
                                     habilidad1 = habilidad1 - 1;
                                     desc = 2;
@@ -1198,6 +1196,7 @@ public class Laberinto
                                 }
                                 if (hab == 0 && habilidad1 > 0 && jug1 == "J")
                                 {
+                                    Musc.Sonidos(3);
                                     if (puntos2 != 0)
                                     {
                                         puntos1 = puntos1 + 1;
@@ -1248,7 +1247,7 @@ public class Laberinto
                                     c = c + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { puntos1 = puntos1 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X" && tramp)
                                 {
@@ -1299,7 +1298,7 @@ public class Laberinto
                                     playerX = playerX + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { puntos1 = puntos1 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X" && tramp)
                                 {
@@ -1350,7 +1349,7 @@ public class Laberinto
                                     c = c + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { puntos1 = puntos1 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X" && tramp)
                                 {
@@ -1401,7 +1400,7 @@ public class Laberinto
                                     playerY = playerY + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { puntos1 = puntos1 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X" && tramp)
                                 {
@@ -1449,6 +1448,7 @@ public class Laberinto
                             case ConsoleKey.X:
                                 if (hab == 0 && habilidad1 > 0 && jug1 == "V")
                                 {
+                                    Musc.Sonidos(3);
                                     control1 = !control1;
                                     c = 5;
                                     habilidad1 = habilidad1 - 1;
@@ -1457,6 +1457,7 @@ public class Laberinto
                                 }
                                 if (hab == 0 && habilidad1 > 0 && jug1 == "S")
                                 {
+                                    Musc.Sonidos(3);
                                     tramp = false;
                                     habilidad1 = habilidad1 - 1;
                                     hab = hab + 1;
@@ -1499,7 +1500,7 @@ public class Laberinto
                                     playerXX = playerXX - 1;
                                     cantpaso2 = cantpaso2 - 1;
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerXX, playerYY] == "§") { matriz[playerXX, playerYY] = jug2; c = CasillaBen(c, jug2); }
                                 if (matriz[playerXX, playerYY] == "X")
                                 {
@@ -1550,7 +1551,7 @@ public class Laberinto
                                     playerXX = playerXX + 1;
                                     cantpaso2 = cantpaso2 - 1;
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerXX, playerYY] == "§") { matriz[playerXX, playerYY] = jug2; c = CasillaBen(c, jug2); }
                                 if (matriz[playerXX, playerYY] == "X")
                                 {
@@ -1601,7 +1602,7 @@ public class Laberinto
                                     playerYY = playerYY - 1;
                                     cantpaso2 = cantpaso2 - 1;
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerXX, playerYY] == "§") { matriz[playerXX, playerYY] = jug2; c = CasillaBen(c, jug2); }
                                 if (matriz[playerXX, playerYY] == "X")
                                 {
@@ -1652,7 +1653,7 @@ public class Laberinto
                                     playerYY = playerYY + 1;
                                     cantpaso2 = cantpaso2 - 1;
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerXX, playerYY] == "§") { matriz[playerXX, playerYY] = jug2; c = CasillaBen(c, jug2); }
                                 if (matriz[playerXX, playerYY] == "X")
                                 {
@@ -1699,6 +1700,7 @@ public class Laberinto
                             case ConsoleKey.X:
                                 if (hab == 0 && habilidad2 > 0 && jug2 == "I")
                                 {
+                                    Musc.Sonidos(3);
                                     cantpaso2 = cantpaso2 + 3;
                                     c = c - 3;
                                     habilidad2 = habilidad2 - 1;
@@ -1707,6 +1709,7 @@ public class Laberinto
                                 }
                                 if (hab == 0 && habilidad2 > 0 && jug2 == "C")
                                 {
+                                    Musc.Sonidos(3);
                                     saltarturno = 1;
                                     habilidad2 = habilidad2 - 1;
                                     desc = 2;
@@ -1714,6 +1717,7 @@ public class Laberinto
                                 }
                                 if (hab == 0 && habilidad2 > 0 && jug2 == "J")
                                 {
+                                    Musc.Sonidos(3);
                                     if (puntos1 != 0)
                                     {
                                         puntos2 = puntos2 + 1;
@@ -1763,7 +1767,7 @@ public class Laberinto
                                     c = c + 1;
                                     playerXX = playerXX - 1;
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerXX, playerYY] == "§") { matriz[playerXX, playerYY] = jug2; c = CasillaBen(c, jug2); }
                                 if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
@@ -1814,7 +1818,7 @@ public class Laberinto
                                     c = c + 1;
                                     playerXX = playerXX + 1;
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerXX, playerYY] == "§") { matriz[playerXX, playerYY] = jug2; c = CasillaBen(c, jug2); }
                                 if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
@@ -1865,7 +1869,7 @@ public class Laberinto
                                     c = c + 1;
                                     playerYY = playerYY - 1;
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerXX, playerYY] == "§") { matriz[playerXX, playerYY] = jug2; c = CasillaBen(c, jug2); }
                                 if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
@@ -1917,7 +1921,7 @@ public class Laberinto
                                     playerYY = playerYY + 1;
 
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerXX, playerYY] == "§") { matriz[playerXX, playerYY] = jug2; c = CasillaBen(c, jug2); }
                                 if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
@@ -1964,6 +1968,7 @@ public class Laberinto
                             case ConsoleKey.X:
                                 if (hab == 0 && habilidad2 > 0 && jug2 == "V")
                                 {
+                                    Musc.Sonidos(3);
                                     control2 = !control2;
                                     c = 5;
                                     habilidad2 = habilidad2 - 1;
@@ -1972,6 +1977,7 @@ public class Laberinto
                                 }
                                 if (hab == 0 && habilidad2 > 0 && jug2 == "S")
                                 {
+                                    Musc.Sonidos(3);
                                     tramp = false;
                                     habilidad2 = habilidad2 - 1;
                                     hab = hab + 1;
@@ -1992,6 +1998,7 @@ public class Laberinto
             t = 0;
             hab = 0;
             tramp = true;
+            Musc.Sonidos(1);
             if (saltarturno == 0) turnos = !turnos;
             saltarturno = 0;
             if (enfriamiento1 == 3) { enfriamiento1 = 0; }
@@ -2019,7 +2026,7 @@ public class Laberinto
                                     playerXX = playerXX - 1;
                                     cantpaso2 = cantpaso2 - 1;
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerXX, playerYY] == "§") { matriz[playerXX, playerYY] = jug2; c = CasillaBen(c, jug2); }
                                 if (matriz[playerXX, playerYY] == "X")
                                 {
@@ -2069,7 +2076,7 @@ public class Laberinto
                                     playerXX = playerXX + 1;
                                     cantpaso2 = cantpaso2 - 1;
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerXX, playerYY] == "§") { matriz[playerXX, playerYY] = jug2; c = CasillaBen(c, jug2); }
                                 if (matriz[playerXX, playerYY] == "X")
                                 {
@@ -2119,7 +2126,7 @@ public class Laberinto
                                     playerYY = playerYY - 1;
                                     cantpaso2 = cantpaso2 - 1;
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerXX, playerYY] == "§") { matriz[playerXX, playerYY] = jug2; c = CasillaBen(c, jug2); }
                                 if (matriz[playerXX, playerYY] == "X")
                                 {
@@ -2169,7 +2176,7 @@ public class Laberinto
                                     playerYY = playerYY + 1;
                                     cantpaso2 = cantpaso2 - 1;
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerXX, playerYY] == "§") { matriz[playerXX, playerYY] = jug2; c = CasillaBen(c, jug2); }
                                 if (matriz[playerXX, playerYY] == "X")
                                 {
@@ -2237,7 +2244,7 @@ public class Laberinto
                                     c = c + 1;
                                     playerXX = playerXX - 1;
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerXX, playerYY] == "§") { matriz[playerXX, playerYY] = jug2; c = CasillaBen(c, jug2); }
                                 if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
@@ -2287,7 +2294,7 @@ public class Laberinto
                                     c = c + 1;
                                     playerXX = playerXX + 1;
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerXX, playerYY] == "§") { matriz[playerXX, playerYY] = jug2; c = CasillaBen(c, jug2); }
                                 if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
@@ -2337,7 +2344,7 @@ public class Laberinto
                                     c = c + 1;
                                     playerYY = playerYY - 1;
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerXX, playerYY] == "§") { matriz[playerXX, playerYY] = jug2; c = CasillaBen(c, jug2); }
                                 if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
@@ -2387,7 +2394,7 @@ public class Laberinto
                                     c = c + 1;
                                     playerYY = playerYY + 1;
                                 }
-                                if (matriz[playerXX, playerYY] == "*") puntos2 = puntos2 + 1;
+                                if (matriz[playerXX, playerYY] == "*") { puntos2 = puntos2 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") c = CasillaBen(c, jug2);
                                 if (matriz[playerXX, playerYY] == "X" && tramp)
                                 {
@@ -2463,7 +2470,7 @@ public class Laberinto
                                     c = c + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { puntos1 = puntos1 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X")
                                 {
@@ -2516,7 +2523,7 @@ public class Laberinto
                                     playerX = playerX + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { puntos1 = puntos1 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X")
                                 {
@@ -2567,7 +2574,7 @@ public class Laberinto
                                     c = c + 1;
                                 }
 
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { puntos1 = puntos1 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X")
                                 {
@@ -2618,7 +2625,7 @@ public class Laberinto
                                     playerY = playerY + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { puntos1 = puntos1 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X")
                                 {
@@ -2687,7 +2694,7 @@ public class Laberinto
                                     c = c + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { puntos1 = puntos1 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X")
                                 {
@@ -2737,7 +2744,7 @@ public class Laberinto
                                     playerX = playerX + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { puntos1 = puntos1 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X")
                                 {
@@ -2787,7 +2794,7 @@ public class Laberinto
                                     c = c + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { puntos1 = puntos1 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X")
                                 {
@@ -2837,7 +2844,7 @@ public class Laberinto
                                     playerY = playerY + 1;
                                     cantpaso1 = cantpaso1 - 1;
                                 }
-                                if (matriz[playerX, playerY] == "*") puntos1 = puntos1 + 1;
+                                if (matriz[playerX, playerY] == "*") { puntos1 = puntos1 + 1; Musc.Sonidos(2); }
                                 if (matriz[playerX, playerY] == "§") { matriz[playerX, playerY] = jug1; c = CasillaBen(c, jug1); }
                                 if (matriz[playerX, playerY] == "X")
                                 {
@@ -2898,6 +2905,7 @@ public class Laberinto
     //este metodo es para q cuando caigas en casilla de beneficio se active el mismo
     public static int CasillaBen(int c, string jug)
     {
+        Musc.Sonidos(5);
         Random random = new Random();
         int tip = random.Next(1, 5);
         if (turnos)
@@ -2941,7 +2949,7 @@ public class Laberinto
         Console.ReadKey();
         return c - tip;
     }
-    //para las diferentes trampas 
+    //para saber que hacen las diferentes trampas 
     public static void FuncTranpas(int t)
     {
         Console.ForegroundColor = ConsoleColor.Red;
@@ -2950,18 +2958,22 @@ public class Laberinto
         }
         if (t == 1)
         {
+            Musc.Sonidos(4);
             Console.WriteLine("ESTA TRAMPA TE HA ENVIADO A LA CASILLA DE SALIDA ( presione cualquier tecla para continuar )");
         }
         if (t == 2)
         {
+            Musc.Sonidos(4);
             Console.WriteLine("ESTA TRAMPA TE QUITA PUNTOS ( presione cualquier tecla para continuar )");
         }
         if (t == 3)
         {
+            Musc.Sonidos(4);
             Console.WriteLine("ESTA TRAMPA TE QUITA PUNTOS PERO USTED NO TIENE AUN( presione cualquier tecla para continuar )");
         }
         if (t == 4)
         {
+            Musc.Sonidos(4);
             Console.WriteLine("ESTA TRAMPA YA NO DEJA QUE TE MUEVAS MAS ( presione cualquier tecla para continuar )");
         }
         Console.ResetColor();
@@ -3008,6 +3020,7 @@ public class Laberinto
     {
         if (puntos1 == 6)
         {
+            Musc.Sonidos(3);
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine(" FELIZIDADES EL JUGADOR UNO CONSEGUIDO LAS SEIS GEMAS ;)");
@@ -3018,6 +3031,7 @@ public class Laberinto
         }
         if (puntos2 == 6)
         {
+            Musc.Sonidos(3);
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine(" FELIZIDADES EL JUGADOR DOS CONSEGUIDO LAS SEIS GEMAS ;)");
@@ -3030,6 +3044,7 @@ public class Laberinto
     //cartel al salir 
     public static void Exit()
     {
+        Musc.Sonidos(3);
         Console.Clear();
         Console.WriteLine(" USTED HA SALIDO EL JUEGO ");
         Console.ReadKey();
