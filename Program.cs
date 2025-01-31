@@ -563,7 +563,7 @@ public class Laberinto
             }
         }
     }
-    //distribulle las trampas 
+    //Distribuye las trampas 
     public static void Tranpas()
     {
         Random random = new Random();
@@ -802,18 +802,34 @@ public class Laberinto
     {
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.Blue;
-        int c = 0;
+        int c = 0; int cc = 0;
         string hist = "LAS GEMAS DEL INFINITO SON SEIS: MENTE, ALMA, ESPACIO, PODER, TIEMPO Y REALIDAD.EN ESTE MULTIVERSO EN EL QUE SE ENCUNTRAN SE HA ALERADO LA REALIDAD POR LO QUE AHORA EXISTEN MAS DE SEIS GEMAS. SU OBJETIVO ES AGARRAR SEIS DE ESTAS GEMAS PARA PODER VOLVER A TU REALIDAD. SUERTE";
         for (int t = 0; t < hist.Length; t++)
         {
+
             Thread.Sleep(5);
             if (t >= Console.WindowWidth - 12 && hist[t] == ' ' && c == 0)
             {
                 Console.WriteLine(" ");
                 c = 1;
-
             }
             Console.Write(hist[t]);
+            if (Console.KeyAvailable)
+            {
+                Console.Clear();
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                for (int tt = 0; tt < hist.Length; tt++)
+                {
+                    if (tt >= Console.WindowWidth - 12 && hist[tt] == ' ' && cc == 0)
+                    {
+                        Console.WriteLine(" ");
+                        cc = 1;
+                    }
+                    Console.Write(hist[tt]);
+                }
+                break;
+                t = 100000;
+            }
         }
         Console.WriteLine(" ");
         Console.WriteLine(" ");
@@ -854,6 +870,8 @@ public class Laberinto
                     Console.WriteLine("╚═══════════════╩═════════════════╩═════════════════╩═════════════════╩════════════════════╝");
                     Console.WriteLine("");
                     AnsiConsole.MarkupLine("[blue]-USO DE HABILIDAD:[/] ESTA SE PUEDE USAR PULSANDO X Y SOLO SE PUEDE USAR EN LA PRIMERA ACCION DEL TURNO ");
+                    Console.WriteLine("");
+                    AnsiConsole.MarkupLine("[blue]-PERSONAJES:[/] EL PERSONAJE EN EL MAPA ESTARA REPRESENTADO POR EL CARACTER CON EL QUE COMIENZA SU NOMBRE Y EN COLOR AZUL AL QUE LE CORRESPONDA EL TURNO. EJEMPLO: SPIDERMAN- [blue]S[/] ");
                     Console.WriteLine("");
                     AnsiConsole.MarkupLine("[blue]-LEYENDA:[/] ");
                     AnsiConsole.MarkupLine("[red] X [/] - TRAMPAS  ");

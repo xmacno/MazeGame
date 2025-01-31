@@ -1,0 +1,117 @@
+>Informe:
+
+-Instalacion:
+Opcion A:
+ 1-En la carpeta del juego hacer click derecho.
+ 2-Elegir la opcion "Abrir en Terminal"
+ 3-Ecribir "dotnet run" en la misma y pulsar la tecla Enter
+
+Opcion B:
+ 1-Pulsar teclas Windows + R
+ 2-Escribir cmd y pulsar tecla Enter
+ 3-En el cmd escribir "cd" seguido un espacio "la ruta del archivo". Pulsar Enter
+ 4-Ecribir "dotnet run" y pulsar la tecla Enter
+
+Opcion C:
+ 1-Abrir el VSC
+ 2-En la terminal escribir "cd" seguido un espacio "la ruta del archivo". Pulsar Enter
+ 4-Ecribir "dotnet run" y pulsar la tecla Enter
+
+
+-Como hice el Proyecto
+ En un principio tuve gran problema para poder generar el laberinto. Luego de lograr esto todo fue un poco mas sencillo. Debido a mi falta de experiencia programado y que nunca habia hecho algo asi, desconocia el uso correcto de las clases, por lo que aprendi esto ya un poco tarde cuando el proyecto estaba bastante avanzado. Explicare cada metod, su funcion y lo mas relevante de cada uno de estos:
+
+>Clase Program:
+ En esta hice un doble for para llenar el laberinto de "0" y luego inicio la clse Laberinto y Menu().
+
+>Clase Laberinto:
+
+1-Menu():
+ Este metodo cumple la funcion de imprimir el menu principal del juego de una manera ms interactiva. 
+ Para lograr este efecto inicialice una variable int llamada op cuyo valor se suma o se resta por un switch dependiendo de si pulsas la flecha hacia arriba o hacia abajo (limitado debido a la cantidad de opciones a elegir por lo que cuando llegas a una de las opciones de los extremos no se suma mas o se resta mas op depenciendo de el extremo en el que se encuentre). Esto metido en un bucle y una serie de if para que se limpie la consola y se imprima la opcion en la que se encuentra segun el valor de op. Luego como parte del switch esta que si pulsas Enter entras las metodo de la opcion pulsada.
+
+2-Controles()
+ Este metodo trae los controles y un pequeño detalle ya que segun el control que toques cambia su color a azul.
+ Esto lo locle con un switch bastante facil de entender a simple vista.
+
+3-TamDelLab()
+ Este metodo es para elegir el tamaño del laberinto. Devuelve un valor int.
+ Utilice practicamente la misma manera que en Menu() para lograr el efcto este. Utilice un Random para dar un valor random a la variable estatica NxN del tamaño del laberinto.
+
+4-DescTamDelLab(int c)
+ Utiliza un int que segun la opcion del tamño del laberinto te da un descripcion diferente con un if que limpia la consola he imprime la descripcion.
+
+5-Gameplay(string jug)
+ Este metodo es para imprimir todo lo de la pantalla de juego (el laberinto con todo lo que tiene y la tabla superior con los datos). 
+ Trabaja con un string jug debido a que segun el jug y si el bool estatico turnos es true o false el color del jugador tanto en la tabla como en el laberinto cambia. Utilice un doble for para imprimir todo lo del laverinto y con if para imprimir las trampas, puntos, jugadores, beneficios, etc. 
+
+6-DescDeHab(int habdesc, int t, string jug)
+ Este metodo es para que cuando un personaje use su habilidad especial te imprima que hace la misma en la parte inferior del laberinto.
+ Usa un sistema parecido al del metodo DescTamDelLab(int c).
+
+7-Paso(int x, int y)
+ Este metodo es el primero de dos que utilice para la creacion del laberinto. En este utilizo una serie de if para verificar todas las direcciones en las que se puede habilitar las casillas y las habilita.
+
+8-Camino()
+ Con este metodo termino termino de formar el laberinto. Comienzo utilizando el metodo Paso() para habilitar las casillas de las esquinas. Con un for uso el metodo Paso() de forma aleatoria por lo que llena el laberinto de islas de casillas habitables. Luego con un doble for va revisando las casillas habitables y habilita mayormente aleatoriamente una de las opciones mas allegada para formar caminos. Luego con unos for reviso que sean habitables las casillas pegadas a los marcos. Inalmente reviso los huecos donde existan muchas casillsa habitables unidas y coloco pared donde se puede para que el laberinto tenga mejor forma y no este abierto.
+
+9-Tranpas()
+ Distribuye las trampas de forma aleatoria en el laberinto sobre casillas habitables.
+
+10-Jugadores()
+ Utiliza el mismo mecanismo que el metodo Menu() para permitirte escoger los dos jugadores con los que deseas jugar.
+
+11-DescJugadores(int c)
+ Utiliza el mismo mecanismo que el metodo DescDeHab(int habdesc, int t, string jug) para dar informacion del personaje que tinesnelegido.
+
+12-MovJug()
+ Este metodo es para mover los personajes por turnos.
+ En este metodo utilizo el bool estatico turnos para revizar un if y un else de este bool dentro de un bucle el cual al terminar el bucle cambia el valor del bool permitiendo utilizar esto para hacer el mecanismo de turnos. cada paso que dan los jugadores se revisa con unos if para dependiendo de la casilla donde se mueva pase algo dependiendo si es trampa, benedicio, punto, etc. 
+
+ -Si cae en una trampa se activa un switch que modifica la posicion del jugador, da fin al for del jugador (para que termine el turno), o le quita un punto restandole a la variable estatica de puntuaciones correspondiente a ese jugador.
+ -Si es una casilla de punto se le suma uno a la variable estatica del puntuacion del jugador correspondiente.
+ -Si cae un una casilla de beneficio se activa el metodo CasillaBen(int c, string jug)
+ -Si en la casilla a la que te quieres mover es un jugador o una pared no se mueve (de esta manera no se resta los pasos de la variables estatica del jugador destinada a los mismos)
+
+ Las habilidades se pueden usas solo en la primera accion debido a las condiciones que le otorgue a un if que se activa al pulsar X. A la vez que das un paso ya se suma la variable hab y solo puedes entrar en ese if si hab = 0.
+ Para en que se restauren las habilidades cree un if fuera del bucle del jugador de forma que al terminar el turno del jugador revice que la variable de habilidad del jugador este sea = 0, donde revisa otra serie de condiciones y al pasar tres turnos se restaura la habilida.
+ 
+  "I"- Tiene la habilidad de moverse tres casillas mas por lo que solo tuve que jugar con el for donde esta este jugador y restarle a la variables que detiene el for al cumplir la cantidad de psaos.
+
+  "C"- Tiene la habilidad de saltar turno por lo que las finalizar el turno del jugador cree un if que si la variable saltarturno es diferente de 0 entonces no cambia el valor del bool para que vuelva a entrar en el turno del mismo jugador. Luego de este if la variable saltarturno le doy valor cero para que vuelva a entrar en el if cada vez que termina el turno como normalmente debira pasar.
+
+  "S"- Tinene la habilidad de saltar trampas, trabaja con un bool por lo que cada vez que caminas hacia una casilla de trampa revisa si este bool es falso o verdadero para decidir si aplicar o no el efecto de la trampa. al finalizar el turno este bool lo vulvo a su valor inicial.
+
+  "V"- Tiene la habilidad de controlar al jugador adversario por lo que utilice un bool llamado control1 o control2 dependiendo del jugador de manera que al activar la habilidad termina el turno y pregunta un if se se hizo algun cambio a este bool para entrar en la movilidad del otro jugador. Teniendo en cuenta que cambio el bool estatico turno tambien para que al vinalizar vuelva a jugar el jugador "V".
+
+  "J"- Tiene la habilidad de rabar un punto al adversario. Solo sume y reste las variables estaticas de puntuacion de cada jugador.
+
+ Al final del todo hay unos if para que dependiendo del jugador se vulva a imprimir en la tabla la cantidad de pasos de este al finalizar el turno.
+
+13-CasillaBen(int c, string jug)
+ Este metodo da un numero aleatorio entre 1 y 4 para si jugar con el las condiciones de movimiento del jugador y sumarle mas pasos por turno.
+
+14-FuncTranpas(int t)
+ Segun la trampa que sea te imprime lo que hace.
+
+15-Points()
+ Distribuye los puntos de la misma manera que Tranpas().
+
+16-Benef()
+ Distribuye los puntos de la misma manera que Tranpas().
+
+17-Win()
+ Este metodo imprime un texto cuando unos de los jugadores consigue que su variable estatica de puntos llegue a 6 y termina el progrma.
+
+18-Exit()
+ Para terminar el programa.
+
+>Clase Musc:
+
+ Esta clase esta hecha para incluir los sonidos al juego con N-audio. Aqui lo mas importante fue como lograr obtener la ruta de los sonidos porque dependiendo donde se guarde el proyecto la ruta puede cambiar por lo que use string estaticos y con AppDomain.CurrentDomain.BaseDirectory obtuve la ruta del archivo la ma modifique con el .Replace para remplazar las "/" por "\" y la ultimas parte de la ruta por la de cada sonido. Luego hice una serie de metodos para que se reprodusca cada sonido que deseaba y utilizando Task.Run se reproducen estos independientemente de lo que este pasando. Para el de la musica de fondo utilice un do while para que no se detenga y la puse directamente en el Main.
+
+
+
+
+
+
